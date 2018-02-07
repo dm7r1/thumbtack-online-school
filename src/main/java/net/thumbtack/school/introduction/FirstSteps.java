@@ -1,7 +1,5 @@
 package net.thumbtack.school.introduction;
 
-import java.util.Arrays;
-
 public class FirstSteps {
     public int sum (int x, int y){
         return x + y;
