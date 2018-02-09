@@ -1,65 +1,66 @@
 package net.thumbtack.school.introduction;
 
 public class FirstSteps {
-    public int sum (int x, int y){
+    public int sum(int x, int y) {
         return x + y;
     }
 
-    public int mul (int x, int y){
+    public int mul(int x, int y) {
         return x * y;
     }
 
-    public int div (int x, int y){
+    public int div(int x, int y) {
         return x / y;
     }
 
-    public int mod (int x, int y){
+    public int mod(int x, int y) {
         return x % y;
     }
 
-    public boolean isEqual (int x, int y){
+    public boolean isEqual(int x, int y) {
         return x == y;
     }
 
-    public boolean isGreater (int x, int y){
+    public boolean isGreater(int x, int y) {
         return x > y;
     }
 
-    public boolean isInsideRect(int xLeft, int yTop, int xRight, int yBottom, int x, int y){
+    public boolean isInsideRect(int xLeft, int yTop, int xRight, int yBottom, int x, int y) {
         return (xLeft <= x) && (xRight >= x) && (yTop <= y) && (yBottom >= y);
     }
 
-    public int sum(int[] array){
+    public int sum(int[] array) {
         int s = 0;
-        for (int i = 0; i < array.length; i++){
-            s += array[i];
+        for (int element : array) {
+            s += element;
         }
         return s;
     }
 
-    public int mul(int[] array){
-        int m = 1;
-        if(array.length == 0)
+    public int mul(int[] array) {
+        if (array.length == 0)
             return 0;
-        for (int i = 0; i < array.length; i++) {
-            m *= array[i];
+        int m = 1;
+        for (int element : array) {
+            m *= element;
         }
         return m;
     }
+
     public int min(int[] array) {
         int mi = Integer.MAX_VALUE;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] < mi)
-                mi = array[i];
+        for (int element : array) {
+            if (element < mi)
+                mi = element;
         }
         return mi;
     }
 
     public int max(int[] array) {
         int ma = Integer.MIN_VALUE;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] > ma)
-                ma = array[i];
+        for (int element : array) {
+            if (element > ma)
+                ma = element;
         }
         return ma;
     }
@@ -68,12 +69,10 @@ public class FirstSteps {
         if (array.length == 0)
             return 0;
         int s = 0;
-        int count = 0;
-        for (int i = 0; i < array.length; i++) {
-            count++;
-            s += array[i];
+        for (int element : array) {
+            s += element;
         }
-        return (double)s / (double)count;
+        return (double) s / (double) array.length;
     }
 
     public boolean isSortedDescendant(int[] array) {
@@ -83,21 +82,21 @@ public class FirstSteps {
         return true;
     }
 
-    public void cube(int[]array) {
+    public void cube(int[] array) {
         for (int i = 0; i < array.length; i++) {
-            array[i] = (int)Math.pow(array[i], 3);
+            array[i] = (int) Math.pow(array[i], 3);
         }
     }
 
-    public boolean find(int[]array, int value) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == value)
+    public boolean find(int[] array, int value) {
+        for (int element : array) {
+            if (element == value)
                 return true;
         }
         return false;
     }
 
-    public void reverse(int[]array) {
+    public void reverse(int[] array) {
         for (int i = 0; i < (array.length / 2); i++) {
             int buf = array[i];
             array[i] = array[array.length - 1 - i];
@@ -105,7 +104,7 @@ public class FirstSteps {
         }
     }
 
-    public boolean isPalindrome(int[]array) {
+    public boolean isPalindrome(int[] array) {
         for (int i = 0; i < (array.length / 2); i++) {
             if (array[i] != array[array.length - 1 - i])
                 return false;
@@ -115,16 +114,15 @@ public class FirstSteps {
 
     public int sum(int[][] matrix) {
         int s = 0;
-        for (int i = 0; i < matrix.length; i++)
-            for (int j = 0; j < matrix[i].length; j++)
-                s += matrix[i][j];
+        for (int[] array : matrix)
+            s += sum(array);
         return s;
     }
 
     public int max(int[][] matrix) {
         int ma = Integer.MIN_VALUE;
-        for (int i = 0; i < matrix.length; i++) {
-            int ma_t = max(matrix[i]);
+        for (int[] array : matrix) {
+            int ma_t = max(array);
             if (ma_t > ma)
                 ma = ma_t;
         }
@@ -140,8 +138,8 @@ public class FirstSteps {
     }
 
     public boolean isSortedDescendant(int[][] matrix) {
-        for(int i = 0; i < matrix.length; i++)
-            if(!isSortedDescendant(matrix[i]))
+        for (int[] array : matrix)
+            if (!isSortedDescendant(array))
                 return false;
         return true;
     }
