@@ -68,11 +68,7 @@ public class FirstSteps {
     public double average(int[] array) {
         if (array.length == 0)
             return 0;
-        int s = 0;
-        for (int element : array) {
-            s += element;
-        }
-        return (double) s / (double) array.length;
+        return (double) sum(array) / array.length;
     }
 
     public boolean isSortedDescendant(int[] array) {
