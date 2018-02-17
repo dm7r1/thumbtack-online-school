@@ -1,5 +1,7 @@
 package net.thumbtack.school.base;
 
+import java.util.StringJoiner;
+
 public class StringOperations {
     public static int getSummaryLength(String[] strings) {
         int sum = 0;
@@ -51,7 +53,7 @@ public class StringOperations {
     }
 
     public static String concat(String string1, String string2) {
-        return string1 + string2;
+        return string1.concat(string2);
     }
 
     public static boolean isSamePrefix(String string1, String string2, String prefix) {
@@ -79,15 +81,13 @@ public class StringOperations {
     }
 
     public static boolean isPalindromeIgnoreCase(String string) {
-        return new StringBuilder(string).reverse().toString().equalsIgnoreCase(string);
+        return isPalindrome(string.toLowerCase());
     }
 
     public static String getLongestPalindromeIgnoreCase(String[] strings) {
         String max_string = "";
-        int max_len = 0;
         for (String string: strings) {
-            if (isPalindromeIgnoreCase(string) && max_len < string.length()) {
-               max_len = string.length();
+            if (isPalindromeIgnoreCase(string) && max_string.length() < string.length()) {
                max_string = string;
             }
         }
@@ -96,7 +96,7 @@ public class StringOperations {
 
     public static boolean hasSameSubstring(String string1, String string2, int index, int length) {
         return  (index + length <= string1.length() && index + length <= string2.length()) &&
-                string1.substring(index, index + length - 1).equals(string2.substring(index, index + length - 1));
+                string1.substring(index, index + length).equals(string2.substring(index, index + length));
     }
 
     public static boolean isEqualAfterReplaceCharacters(String string1, char replaceInStr1, char replaceByInStr1,
@@ -119,34 +119,26 @@ public class StringOperations {
         return string1.trim().equals(string2.trim());
     }
 
-    public static StringBuilder makeCsvStringBuilderFromInts(int[] array) {
-        StringBuilder stringBuilder = new StringBuilder("");
-        for(int i = 0; i < array.length; i++) {
-            stringBuilder.append(Integer.toString(array[i]));
-            if (i < array.length - 1)
-                stringBuilder.append(",");
-        }
-        return stringBuilder;
-
-    }
-
     public static String makeCsvStringFromInts(int[] array) {
-        return makeCsvStringBuilderFromInts(array).toString();
+        StringJoiner stringJoiner = new StringJoiner(",");
+        for(int element: array)
+            stringJoiner.add(Integer.toString(element));
+        return stringJoiner.toString();
     }
 
-
-    public static StringBuilder makeCsvStringBuilderFromDoubles(double[] array) {
-        StringBuilder stringBuilder = new StringBuilder("");
-        for(int i = 0; i < array.length; i++) {
-            stringBuilder.append(String.format("%.2f", array[i]));
-            if (i < array.length - 1)
-                stringBuilder.append(",");
-        }
-        return stringBuilder;
+    public static StringBuilder makeCsvStringBuilderFromInts(int[] array) {
+        return new StringBuilder(makeCsvStringFromInts(array));
     }
 
     public static String makeCsvStringFromDoubles(double[] array) {
-        return makeCsvStringBuilderFromDoubles(array).toString();
+        StringJoiner stringJoiner = new StringJoiner(",");
+        for(double element: array)
+            stringJoiner.add(String.format("%.2f", element));
+        return stringJoiner.toString();
+    }
+
+    public static StringBuilder makeCsvStringBuilderFromDoubles(double[] array) {
+        return new StringBuilder(makeCsvStringFromDoubles(array));
     }
 
     public static StringBuilder removeCharacters(String string, int[] positions) {
