@@ -10,8 +10,7 @@ public class Rectangle3D extends Rectangle {
     }
 
     public Rectangle3D(int xLeft, int yTop, int xRight, int yBottom, int height) {
-        super(xLeft, yTop, xRight, yBottom);
-        this.height = height;
+        this(new Point2D(xLeft, yTop), new Point2D(xRight, yBottom), height);
     }
 
     public Rectangle3D(int length, int width, int height) {
@@ -20,8 +19,7 @@ public class Rectangle3D extends Rectangle {
     }
 
     public Rectangle3D() {
-        super();
-        this.height = 1;
+        this(1, 1, 1);
     }
 
     public int getHeight() {

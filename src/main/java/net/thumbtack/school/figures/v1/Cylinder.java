@@ -9,18 +9,15 @@ public class Cylinder extends Circle {
     }
 
     public Cylinder(int xCenter, int yCenter, int radius, int height) {
-        super(xCenter, yCenter, radius);
-        this.height = height;
+        this(new Point2D(xCenter, yCenter), radius, height);
     }
 
     public Cylinder(int radius, int height) {
-        super(radius);
-        this.height = height;
+        this(new Point2D(), radius, height);
     }
 
     public Cylinder() {
-        super();
-        this.height = 1;
+        this(1, 1);
     }
 
     public int getHeight() {
