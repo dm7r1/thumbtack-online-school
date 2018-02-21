@@ -1,23 +1,24 @@
-package net.thumbtack.school.figures.v1;
+package net.thumbtack.school.figures.v2;
 
-public class Rectangle {
+public class Rectangle extends Figure {
     private Point2D topLeft, bottomRight;
 
-    public Rectangle(Point2D leftTop, Point2D rightBottom) {
+    public Rectangle(Point2D leftTop, Point2D rightBottom, int color) {
+        super(color);
         topLeft = leftTop;
         bottomRight = rightBottom;
     }
 
-    public Rectangle(int xLeft, int yTop, int xRight, int yBottom) {
-        this(new Point2D(xLeft, yTop), new Point2D(xRight, yBottom));
+    public Rectangle(int xLeft, int yTop, int xRight, int yBottom, int color) {
+        this(new Point2D(xLeft, yTop), new Point2D(xRight, yBottom), color);
     }
 
-    public Rectangle(int length, int width) {
-        this(0, -Math.abs(width), Math.abs(length), 0);
+    public Rectangle(int length, int width, int color) {
+        this(0, -Math.abs(width), Math.abs(length), 0, color);
     }
 
-    public Rectangle() {
-        this(1, 1);
+    public Rectangle(int color) {
+        this(1, 1, color);
     }
 
     public Point2D getTopLeft() {
@@ -44,6 +45,7 @@ public class Rectangle {
         return bottomRight.getY() - topLeft.getY();
     }
 
+    @Override
     public void moveRel(int dx, int dy) {
         topLeft.moveRel(dx, dy);
         bottomRight.moveRel(dx, dy);
@@ -53,20 +55,19 @@ public class Rectangle {
         bottomRight.moveRel(this.getLength() * (nx - 1), this.getWidth() * (ny - 1));
     }
 
+    @Override
     public double getArea() {
         return getLength() * getWidth();
     }
 
+    @Override
     public double getPerimeter() {
         return getLength() * 2 + getWidth() * 2;
     }
 
+    @Override
     public boolean isInside(int x, int y) {
         return (x >= topLeft.getX()) && (y >= topLeft.getY()) && (x <= bottomRight.getX()) && (y <= bottomRight.getY());
-    }
-
-    public boolean isInside(Point2D point) {
-        return isInside(point.getX(), point.getY());
     }
 
     public boolean isIntersects(Rectangle rectangle) {
@@ -82,6 +83,7 @@ public class Rectangle {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Rectangle rectangle = (Rectangle) o;
 
@@ -91,7 +93,8 @@ public class Rectangle {
 
     @Override
     public int hashCode() {
-        int result = topLeft.hashCode();
+        int result = super.hashCode();
+        result = 31 * result + topLeft.hashCode();
         result = 31 * result + bottomRight.hashCode();
         return result;
     }

@@ -1,12 +1,14 @@
-package net.thumbtack.school.figures.v1;
+package net.thumbtack.school.figures.v2;
 
-public class Triangle {
+public class Triangle extends Figure {
     private Point2D point1, point2, point3;
 
-    public Triangle(Point2D point1, Point2D point2, Point2D point3) {
+    public Triangle(Point2D point1, Point2D point2, Point2D point3, int color) {
+        super(color);
         this.point1 = point1;
         this.point2 = point2;
         this.point3 = point3;
+        this.color = color;
     }
 
     public Point2D getPoint1() {
@@ -49,12 +51,14 @@ public class Triangle {
         return calcDistance(point2, point3);
     }
 
+    @Override
     public void moveRel(int dx, int dy) {
         point1.moveRel(dx, dy);
         point2.moveRel(dx, dy);
         point3.moveRel(dx, dy);
     }
 
+    @Override
     public double getArea() {
         double a = getSide12();
         double b = getSide13();
@@ -63,6 +67,7 @@ public class Triangle {
         return Math.sqrt(p * (p - a) * (p - b) * (p - c));
     }
 
+    @Override
     public double getPerimeter() {
         return getSide12() + getSide13() + getSide23();
     }
@@ -76,20 +81,18 @@ public class Triangle {
         return side(linePoint1, linePoint2, point1) * side(linePoint1, linePoint2, point2) >= 0;
     }
 
+    @Override
     public boolean isInside(Point2D point) {
         return  sameSide(point1, point2, point3, point) &&
                 sameSide(point1, point3, point2, point) &&
                 sameSide(point2, point3, point1, point);
     }
 
-    public boolean isInside(int x, int y) {
-        return isInside(new Point2D(x, y));
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Triangle triangle = (Triangle) o;
 
@@ -100,7 +103,8 @@ public class Triangle {
 
     @Override
     public int hashCode() {
-        int result = point1.hashCode();
+        int result = super.hashCode();
+        result = 31 * result + point1.hashCode();
         result = 31 * result + point2.hashCode();
         result = 31 * result + point3.hashCode();
         return result;

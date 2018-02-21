@@ -1,23 +1,23 @@
-package net.thumbtack.school.figures.v1;
+package net.thumbtack.school.figures.v2;
 
 public class Cylinder extends Circle {
     private int height;
 
-    public Cylinder(Point2D center, int radius, int height) {
-        super(center, radius);
+    public Cylinder(Point2D center, int radius, int height, int color) {
+        super(center, radius, color);
         this.height = height;
     }
 
-    public Cylinder(int xCenter, int yCenter, int radius, int height) {
-        this(new Point2D(xCenter, yCenter), radius, height);
+    public Cylinder(int xCenter, int yCenter, int radius, int height, int color) {
+        this(new Point2D(xCenter, yCenter), radius, height, color);
     }
 
-    public Cylinder(int radius, int height) {
-        this(new Point2D(), radius, height);
+    public Cylinder(int radius, int height, int color) {
+        this(new Point2D(), radius, height, color);
     }
 
-    public Cylinder() {
-        this(1, 1);
+    public Cylinder(int color) {
+        this(1, 1, color);
     }
 
     public int getHeight() {
