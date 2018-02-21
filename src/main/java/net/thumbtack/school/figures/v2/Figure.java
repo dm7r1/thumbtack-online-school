@@ -1,7 +1,7 @@
 package net.thumbtack.school.figures.v2;
 
 abstract public class Figure implements Colored {
-    int color;
+    private int color;
 
     abstract public double getArea();
 

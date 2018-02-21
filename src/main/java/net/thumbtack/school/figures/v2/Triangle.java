@@ -8,7 +8,6 @@ public class Triangle extends Figure {
         this.point1 = point1;
         this.point2 = point2;
         this.point3 = point3;
-        this.color = color;
     }
 
     public Point2D getPoint1() {

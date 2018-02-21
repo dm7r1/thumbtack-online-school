@@ -2,6 +2,7 @@ package net.thumbtack.school.figures.v2;
 
 public class CircleFactory {
     static private int circleCount = 0;
+    
     public static Circle createCircle(Point2D center, int radius, int color) {
         circleCount++;
         return new Circle(center, radius, color);

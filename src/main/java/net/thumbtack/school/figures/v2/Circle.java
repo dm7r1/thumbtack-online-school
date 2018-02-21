@@ -3,6 +3,7 @@ package net.thumbtack.school.figures.v2;
 public class Circle extends Figure {
     private Point2D center;
     private int radius;
+
     public Circle(Point2D center, int radius, int color) {
         super(color);
         this.center = center;
