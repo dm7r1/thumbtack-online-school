@@ -89,6 +89,11 @@ public class Triangle extends Figure {
     }
 
     @Override
+    public boolean isInside(int x, int y) {
+        return isInside(new Point2D(x, y));
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

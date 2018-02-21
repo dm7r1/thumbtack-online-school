@@ -11,13 +11,11 @@ abstract public class Figure implements Colored {
         this.color = color;
     }
 
-    public boolean isInside(int x, int y) {
-        return isInside(new Point2D(x, y));
-    }  // ...
+    abstract public boolean isInside(int x, int y);
 
     public boolean isInside(Point2D point) {
         return isInside(point.getX(), point.getY());
-    }  // One of these methods must be overrode
+    }
 
     abstract public void moveRel(int dx, int dy);
 
