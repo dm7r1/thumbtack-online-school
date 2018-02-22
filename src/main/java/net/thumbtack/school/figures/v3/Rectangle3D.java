@@ -1,25 +1,44 @@
-package net.thumbtack.school.figures.v2;
+package net.thumbtack.school.figures.v3;
 
+
+import net.thumbtack.school.colors.Color;
+import net.thumbtack.school.colors.ColorException;
 
 public class Rectangle3D extends Rectangle {
     private int height;
 
-    public Rectangle3D(Point2D leftTop, Point2D rightBottom, int height, int color) {
+    public Rectangle3D(Point2D leftTop, Point2D rightBottom, int height, Color color) throws ColorException {
         super(leftTop, rightBottom, color);
         this.height = height;
     }
 
-    public Rectangle3D(int xLeft, int yTop, int xRight, int yBottom, int height, int color) {
+    public Rectangle3D(Point2D leftTop, Point2D rightBottom, int height, String colorString) throws ColorException {
+        this(leftTop, rightBottom, height, Color.colorFromString(colorString));
+    }
+
+    public Rectangle3D(int xLeft, int yTop, int xRight, int yBottom, int height, Color color) throws ColorException {
         this(new Point2D(xLeft, yTop), new Point2D(xRight, yBottom), height, color);
     }
 
-    public Rectangle3D(int length, int width, int height, int color) {
+    public Rectangle3D(int xLeft, int yTop, int xRight, int yBottom, int height, String colorString) throws ColorException {
+        this(xLeft, yTop, xRight, yBottom, height, Color.colorFromString(colorString));
+    }
+
+    public Rectangle3D(int length, int width, int height, Color color) throws ColorException {
         super(length, width, color);
         this.height = height;
     }
 
-    public Rectangle3D(int color) {
+    public Rectangle3D(int length, int width, int height, String colorString) throws ColorException {
+        this(length, width, height, Color.colorFromString(colorString));
+    }
+
+    public Rectangle3D(Color color) throws ColorException {
         this(1, 1, 1, color);
+    }
+
+    public Rectangle3D(String colorString) throws ColorException {
+        this(Color.colorFromString(colorString));
     }
 
     public int getHeight() {

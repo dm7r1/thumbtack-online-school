@@ -1,13 +1,20 @@
-package net.thumbtack.school.figures.v2;
+package net.thumbtack.school.figures.v3;
+
+import net.thumbtack.school.colors.Color;
+import net.thumbtack.school.colors.ColorException;
 
 public class Triangle extends Figure {
     private Point2D point1, point2, point3;
 
-    public Triangle(Point2D point1, Point2D point2, Point2D point3, int color) {
+    public Triangle(Point2D point1, Point2D point2, Point2D point3, Color color) throws ColorException {
         super(color);
         this.point1 = point1;
         this.point2 = point2;
         this.point3 = point3;
+    }
+
+    public Triangle(Point2D point1, Point2D point2, Point2D point3, String colorString) throws ColorException {
+        this(point1, point2, point3, Color.colorFromString(colorString));
     }
 
     public Point2D getPoint1() {

@@ -1,4 +1,4 @@
-package net.thumbtack.school.figures.v2;
+package net.thumbtack.school.figures.v3;
 
 public class Point2D {
 
