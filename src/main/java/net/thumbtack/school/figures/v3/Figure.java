@@ -9,15 +9,10 @@ import net.thumbtack.school.colors.Colored;
 abstract public class Figure implements Colored, HasArea {
     private Color color;
 
-    @Override
-    abstract public double getArea();
-
     abstract public double getPerimeter();
 
     Figure(Color color) throws ColorException {
-        if(color == null)
-            throw new ColorException(ColorErrorCode.NULL_COLOR);
-        this.color = color;
+        setColor(color);
     }
 
     abstract public boolean isInside(int x, int y);

@@ -14,16 +14,14 @@ public class Car implements Colored {
         this.model = model;
         this.weight = weight;
         this.maxSpeed = maxSpeed;
-        if(color == null)
-            throw new ColorException(ColorErrorCode.NULL_COLOR);
-        this.color = color;
+        setColor(color);
     }
 
     public Car (String model, int weight, int maxSpeed, String colorString) throws ColorException {
         this.model = model;
         this.weight = weight;
         this.maxSpeed = maxSpeed;
-        this.color = Color.colorFromString(colorString);
+        setColor(colorString);
 
     }
 
