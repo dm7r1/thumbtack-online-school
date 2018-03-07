@@ -1,9 +1,12 @@
 package net.thumbtack.school.ttschool;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class Trainee {
+public class Trainee implements Serializable {
+    private static final long serialVersionUID = 469137520048633995L;
+
     private String firstName, lastName;
     private int rating;
 
