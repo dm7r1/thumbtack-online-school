@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class TraineeQueue {
-    Queue<Trainee> traineeQueue;
+    private Queue<Trainee> traineeQueue;
 
     public TraineeQueue() {
         traineeQueue = new LinkedList<>();

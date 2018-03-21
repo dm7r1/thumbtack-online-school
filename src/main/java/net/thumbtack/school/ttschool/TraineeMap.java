@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class TraineeMap {
-    Map<Trainee, String> traineesInfo;
+    private Map<Trainee, String> traineesInfo;
 
     public TraineeMap() {
         traineesInfo = new HashMap<>();

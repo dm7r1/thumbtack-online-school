@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MatrixNonSimilarRows {
-    Set<int[]> nonSimilarRows;
+    private Set<int[]> nonSimilarRows;
 
     public MatrixNonSimilarRows(int[][] matrix) {
         Map<Set<Integer>, List<List<Integer>>> rows = new HashMap<>();
