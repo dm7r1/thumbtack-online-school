@@ -36,15 +36,12 @@ public class School {
     }
 
     public void  addGroup(Group group) throws TrainingException {
-        if(groups.contains(group))
+        if(!groups.add(group))
             throw new TrainingException(TrainingErrorCode.DUPLICATE_GROUP_NAME);
-        groups.add(group);
     }
 
     public void  removeGroup(Group group) throws TrainingException {
-        if(groups.contains(group))
-            groups.remove(group);
-        else
+        if(!groups.remove(group))
             throw new TrainingException(TrainingErrorCode.GROUP_NOT_FOUND);
     }
 
@@ -73,7 +70,6 @@ public class School {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(year, name, groups);
     }
 }

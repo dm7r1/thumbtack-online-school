@@ -1,7 +1,5 @@
 package net.thumbtack.school.ttschool;
 
-import net.thumbtack.school.boxes.ArrayBox;
-
 import java.util.*;
 
 public class Group {
@@ -43,9 +41,7 @@ public class Group {
     }
 
     public void  removeTrainee(Trainee trainee) throws TrainingException {
-        if(trainees.contains(trainee))
-            trainees.remove(trainee);
-        else
+        if(!trainees.remove(trainee))
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
     }
 
@@ -97,8 +93,7 @@ public class Group {
     }
 
     public boolean  hasDuplicates() {
-        Set traineesSet = new HashSet<>(trainees);
-        return traineesSet.size() != trainees.size();
+        return new HashSet<>(trainees).size() != trainees.size();
     }
 
     @Override

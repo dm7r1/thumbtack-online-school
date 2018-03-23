@@ -2,7 +2,6 @@ package net.thumbtack.school.figures.v3;
 
 import net.thumbtack.school.colors.Color;
 import net.thumbtack.school.colors.ColorException;
-import net.thumbtack.school.colors.Colored;
 
 public class Circle extends Figure {
     private Point2D center;

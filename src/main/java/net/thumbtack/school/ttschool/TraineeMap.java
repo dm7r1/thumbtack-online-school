@@ -37,10 +37,10 @@ public class TraineeMap {
     }
 
     public String getInstituteByTrainee(Trainee trainee) throws TrainingException {
-        if(traineesInfo.containsKey(trainee))
-            return traineesInfo.get(trainee);
-        else
+        String institute = traineesInfo.get(trainee);
+        if(institute == null)
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
+        return institute;
     }
 
     public Set<Trainee> getAllTrainees() {
@@ -52,9 +52,6 @@ public class TraineeMap {
     }
 
     public boolean isAnyFromInstitute(String institute) {
-        for (String institute1: traineesInfo.values())
-            if(institute.equals(institute1))
-                return true;
-        return false;
+        return traineesInfo.values().contains(institute);
     }
 }
