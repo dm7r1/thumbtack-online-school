@@ -1,11 +1,13 @@
-package net.thumbtack.school.hiring.server;
+package net.thumbtack.school.hiring.server.personsOperations;
 
 import com.google.gson.Gson;
 import net.thumbtack.school.hiring.data.models.requests.DtoRequestsFactory;
 import net.thumbtack.school.hiring.data.models.requests.RegisterEmployeeDtoRequest;
 import net.thumbtack.school.hiring.data.models.requests.RegisterEmployerDtoRequest;
+import net.thumbtack.school.hiring.data.models.requests.SpecialDtoRequestsFactory;
 import net.thumbtack.school.hiring.data.models.responses.ErrorDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.SuccessfulRegisteredDtoResponse;
+import net.thumbtack.school.hiring.server.Server;
 import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 
@@ -16,9 +18,7 @@ public class TestRegistration {
         server.startServer("");
         Gson gson = new Gson();
 
-        String responseJson = server.registerEmployee(gson.toJson(DtoRequestsFactory.makeRegisterEmployeeDtoRequest(
-            "First", "Last", "Patronymic", "login", "email@example.com", "password"
-        )));
+        String responseJson = server.registerEmployee(gson.toJson(SpecialDtoRequestsFactory.makeValidRegisterEmployeeDtoRequest()));
         assertNotNull(gson.fromJson(responseJson, SuccessfulRegisteredDtoResponse.class).getToken());
 
         server.stopServer("");
@@ -30,9 +30,7 @@ public class TestRegistration {
         server.startServer("");
         Gson gson = new Gson();
 
-        String responseJson = server.registerEmployer(gson.toJson(DtoRequestsFactory.makeRegisterEmployerDtoRequest(
-                "First", "Last", "Patronymic", "login", "email@example.com", "password", "companyName", "address"
-        )));
+        String responseJson = server.registerEmployer(gson.toJson(SpecialDtoRequestsFactory.makeValidRegisterEmployerDtoRequest()));
         assertNotNull(gson.fromJson(responseJson, SuccessfulRegisteredDtoResponse.class).getToken());
 
         server.stopServer("");
@@ -67,7 +65,7 @@ public class TestRegistration {
 
         RegisterEmployerDtoRequest invalidRequests[] = {
                 DtoRequestsFactory.makeRegisterEmployerDtoRequest(null, "Last", "Patronymic", "Login", "email@example.com", "password",
-                    "companyName", "address"),
+                        "companyName", "address"),
                 DtoRequestsFactory.makeRegisterEmployerDtoRequest("", "Last", "Patronymic", "Login", "email@example.com", "password",
                         "companyName", "address"),
                 DtoRequestsFactory.makeRegisterEmployerDtoRequest("First", "Last", "Patronymic", "L", "email@example.com", "password",

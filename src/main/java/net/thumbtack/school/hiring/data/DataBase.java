@@ -2,7 +2,7 @@ package net.thumbtack.school.hiring.data;
 
 import net.thumbtack.school.hiring.data.models.Employee;
 import net.thumbtack.school.hiring.data.models.Employer;
-import net.thumbtack.school.hiring.data.models.Vacation;
+import net.thumbtack.school.hiring.data.models.Vacancy;
 import java.util.UUID;
 
 
@@ -11,7 +11,7 @@ public interface DataBase {
 
     UUID insertEmployer(Employer employer);
 
-    void insertVacation(UUID employerUUID, Vacation vacation);
+    void insertVacancy(UUID employerUUID, Vacancy vacancy);
 
     Employee getEmployeeByUUID(UUID uuid);
 
@@ -20,4 +20,8 @@ public interface DataBase {
     boolean employerExists(UUID uuid);
 
     boolean employeeExists(UUID uuid);
+
+    void deleteEmployeeByUUID(UUID uuid);
+
+    void deleteEmployerByUUID(UUID uuid);
 }

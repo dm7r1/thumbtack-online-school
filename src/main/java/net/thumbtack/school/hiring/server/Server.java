@@ -3,23 +3,20 @@ package net.thumbtack.school.hiring.server;
 import com.google.gson.Gson;
 import net.thumbtack.school.hiring.data.DataBase;
 import net.thumbtack.school.hiring.data.DataBaseImpl;
-import net.thumbtack.school.hiring.data.models.requests.ChangeEmployeeInfoDtoRequest;
-import net.thumbtack.school.hiring.data.models.requests.ChangeEmployerInfoDtoRequest;
-import net.thumbtack.school.hiring.data.models.requests.RegisterEmployerDtoRequest;
-import net.thumbtack.school.hiring.data.models.requests.RegisterEmployeeDtoRequest;
+import net.thumbtack.school.hiring.data.models.requests.*;
 import net.thumbtack.school.hiring.services.PersonsManager;
-import net.thumbtack.school.hiring.services.VacationsManager;
+import net.thumbtack.school.hiring.services.VacanciesManager;
 
 public class Server {
     private DataBase dataBase;
     private PersonsManager usersManager;
-    private VacationsManager vacationsManager;
+    private VacanciesManager vacanciesManager;
     private Gson gson;
 
     public Server() {
         dataBase = new DataBaseImpl();
         usersManager = new PersonsManager(dataBase);
-        vacationsManager = new VacationsManager(dataBase);
+        vacanciesManager = new VacanciesManager(dataBase);
         gson = new Gson();
     }
 
@@ -45,5 +42,20 @@ public class Server {
     public String changeEmployeeInfo(String requestJsonString) {
         ChangeEmployeeInfoDtoRequest request = gson.fromJson(requestJsonString, ChangeEmployeeInfoDtoRequest.class);
         return gson.toJson(usersManager.changeEmployeeInfo(request));
+    }
+
+    public String deleteEmployee(String requestJsonString) {
+        DeleteEmployeeDtoRequest request = gson.fromJson(requestJsonString, DeleteEmployeeDtoRequest.class);
+        return gson.toJson(usersManager.deleteEmployee(request));
+    }
+
+    public String deleteEmployer(String requestJsonString) {
+        DeleteEmployerDtoRequest request = gson.fromJson(requestJsonString, DeleteEmployerDtoRequest.class);
+        return gson.toJson(usersManager.deleteEmployer(request));
+    }
+
+    public String addVacancy(String requestJsonString) {
+        AddVacancyDtoRequest request = gson.fromJson(requestJsonString, AddVacancyDtoRequest.class);
+        return gson.toJson(vacanciesManager.addVacancy(request));
     }
 }

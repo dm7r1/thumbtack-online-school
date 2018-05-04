@@ -2,7 +2,7 @@ package net.thumbtack.school.hiring.data.models.requests.base;
 
 import java.util.UUID;
 
-public class AbstractExistingEmployeeDirectedDtoRequest extends AbstractDtoRequest {
+public class AbstractExistingPersonDirectedDtoRequest extends AbstractDtoRequest {
     protected UUID uuid;
 
     public UUID getUuid() {

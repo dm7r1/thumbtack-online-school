@@ -1,12 +1,14 @@
-package net.thumbtack.school.hiring.server;
+package net.thumbtack.school.hiring.server.personsOperations;
 
 import com.google.gson.Gson;
 import net.thumbtack.school.hiring.data.models.requests.ChangeEmployeeInfoDtoRequest;
 import net.thumbtack.school.hiring.data.models.requests.ChangeEmployerInfoDtoRequest;
 import net.thumbtack.school.hiring.data.models.requests.DtoRequestsFactory;
+import net.thumbtack.school.hiring.data.models.requests.SpecialDtoRequestsFactory;
 import net.thumbtack.school.hiring.data.models.responses.ErrorDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.SuccessEmptyDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.SuccessfulRegisteredDtoResponse;
+import net.thumbtack.school.hiring.server.Server;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -22,12 +24,10 @@ public class TestChangingPersonInfo {
         server.startServer("");
         Gson gson = new Gson();
 
-        String responseJson = server.registerEmployee(gson.toJson(DtoRequestsFactory.makeRegisterEmployeeDtoRequest(
-            "First", "Last", "Patronymic", "login", "email@example.com", "password"
-        )));
+        String responseJson = server.registerEmployee(gson.toJson(SpecialDtoRequestsFactory.makeValidRegisterEmployeeDtoRequest()));
         UUID token = gson.fromJson(responseJson, SuccessfulRegisteredDtoResponse.class).getToken();
         responseJson = server.changeEmployeeInfo(gson.toJson(makeChangeEmployeeInfoDtoRequest(
-                "new_firstName", null, null, null, null, "new_password"
+               token, "new_firstName", null, null, null, "new_password"
         )));
         assertEquals("success", gson.fromJson(responseJson, SuccessEmptyDtoResponse.class).getResult());
 
@@ -40,12 +40,10 @@ public class TestChangingPersonInfo {
         server.startServer("");
         Gson gson = new Gson();
 
-        String responseJson = server.registerEmployer(gson.toJson(DtoRequestsFactory.makeRegisterEmployerDtoRequest(
-            "First", "Last", "Patronymic", "login", "email@example.com", "password", "companyName", "address"
-        )));
+        String responseJson = server.registerEmployer(gson.toJson(SpecialDtoRequestsFactory.makeValidRegisterEmployerDtoRequest()));
         UUID token = gson.fromJson(responseJson, SuccessfulRegisteredDtoResponse.class).getToken();
         responseJson = server.changeEmployerInfo(gson.toJson(DtoRequestsFactory.makeChangeEmployerInfoDtoRequest(
-                null, null, null, null, null, null, "new_companyName", "new_address"
+               token, null, null, null, null, null, "new_companyName", "new_address"
         )));
         assertEquals("success", gson.fromJson(responseJson, SuccessEmptyDtoResponse.class).getResult());
 
@@ -58,15 +56,12 @@ public class TestChangingPersonInfo {
         server.startServer("");
         Gson gson = new Gson();
 
-        String responseJson = server.registerEmployee(gson.toJson(DtoRequestsFactory.makeRegisterEmployeeDtoRequest(
-            "First", "Last", "Patronymic", "login", "email@example.com", "password"
-        )));
+        String responseJson = server.registerEmployee(gson.toJson(SpecialDtoRequestsFactory.makeValidRegisterEmployeeDtoRequest()));
         UUID token = gson.fromJson(responseJson, SuccessfulRegisteredDtoResponse.class).getToken();
         ChangeEmployeeInfoDtoRequest invalidRequests[] = {
-                DtoRequestsFactory.makeChangeEmployeeInfoDtoRequest("", null, null, null, null, null),
-                DtoRequestsFactory.makeChangeEmployeeInfoDtoRequest(null,null, null, "l", null, null),
-                DtoRequestsFactory.makeChangeEmployeeInfoDtoRequest(null,null, null, null, "email", null),
-                DtoRequestsFactory.makeChangeEmployeeInfoDtoRequest(null,null, null, null, null, "p"),
+                DtoRequestsFactory.makeChangeEmployeeInfoDtoRequest(token, "", null, null, null, null),
+                DtoRequestsFactory.makeChangeEmployeeInfoDtoRequest(token, null,null, null, "email", null),
+                DtoRequestsFactory.makeChangeEmployeeInfoDtoRequest(token, null,null, null, null, "p"),
         };
         for(ChangeEmployeeInfoDtoRequest invalidRequest: invalidRequests) {
             responseJson = server.changeEmployeeInfo(gson.toJson(invalidRequest));
@@ -82,18 +77,14 @@ public class TestChangingPersonInfo {
         server.startServer("");
         Gson gson = new Gson();
 
-        String responseJson = server.registerEmployer(gson.toJson(DtoRequestsFactory.makeRegisterEmployerDtoRequest(
-            "First", "Last", "Patronymic", "login", "email@example.com", "password", "companyName", "address"
-        )));
+        String responseJson = server.registerEmployer(gson.toJson(SpecialDtoRequestsFactory.makeValidRegisterEmployerDtoRequest()));
         UUID token = gson.fromJson(responseJson, SuccessfulRegisteredDtoResponse.class).getToken();
         ChangeEmployerInfoDtoRequest invalidRequests[] = {
-                DtoRequestsFactory.makeChangeEmployerInfoDtoRequest(null, null, null, null, null, null,
+                DtoRequestsFactory.makeChangeEmployerInfoDtoRequest(token, null, null, null, null, null,
                         "", null),
-                DtoRequestsFactory.makeChangeEmployerInfoDtoRequest(null,null, null, "l", null, null,
-                        null, null ),
-                DtoRequestsFactory.makeChangeEmployerInfoDtoRequest(null,null, null, null, "email", null,
+                DtoRequestsFactory.makeChangeEmployerInfoDtoRequest(token, null,null, null, "email", null,
                         null, null),
-                DtoRequestsFactory.makeChangeEmployerInfoDtoRequest(null,null, null, null, null, "p",
+                DtoRequestsFactory.makeChangeEmployerInfoDtoRequest(token, null,null, null, null, "p",
                         null, null),
         };
         for(ChangeEmployerInfoDtoRequest invalidRequest: invalidRequests) {

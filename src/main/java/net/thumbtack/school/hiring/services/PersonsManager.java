@@ -4,10 +4,7 @@ import net.thumbtack.school.hiring.data.DataBase;
 import net.thumbtack.school.hiring.data.models.Employee;
 import net.thumbtack.school.hiring.data.models.Employer;
 import net.thumbtack.school.hiring.data.models.InvalidRequestException;
-import net.thumbtack.school.hiring.data.models.requests.ChangeEmployeeInfoDtoRequest;
-import net.thumbtack.school.hiring.data.models.requests.ChangeEmployerInfoDtoRequest;
-import net.thumbtack.school.hiring.data.models.requests.RegisterEmployeeDtoRequest;
-import net.thumbtack.school.hiring.data.models.requests.RegisterEmployerDtoRequest;
+import net.thumbtack.school.hiring.data.models.requests.*;
 import net.thumbtack.school.hiring.data.models.requests.utils.PersonExistenceCheckerImpl;
 import net.thumbtack.school.hiring.data.models.requests.utils.PersonExistenceValidator;
 import net.thumbtack.school.hiring.data.models.requests.utils.PersonInfoRequestsValidator;
@@ -47,7 +44,7 @@ public class PersonsManager {
                 request.getEmail(),
                 request.getPassword()
         ));
-        return new SuccessfulRegisteredDtoResponse(token);
+        return SuccessfulRegisteredDtoResponse.makeNewInstance(token);
     }
 
     public DtoResponse registerEmployer(RegisterEmployerDtoRequest request) {
@@ -76,7 +73,7 @@ public class PersonsManager {
                 request.getCompanyName(),
                 request.getAddress()
         ));
-        return new SuccessfulRegisteredDtoResponse(token);
+        return SuccessfulRegisteredDtoResponse.makeNewInstance(token);
     }
 
     public DtoResponse changeEmployerInfo(ChangeEmployerInfoDtoRequest request) {
@@ -111,7 +108,7 @@ public class PersonsManager {
         if(request.getAddress() != null)
             employer.setAddress(request.getAddress());
 
-        return new SuccessEmptyDtoResponse();
+        return SuccessEmptyDtoResponse.makeNewInstance();
     }
 
     public DtoResponse changeEmployeeInfo(ChangeEmployeeInfoDtoRequest request) {
@@ -140,6 +137,28 @@ public class PersonsManager {
         if(request.getPassword() != null)
             employee.setPassword(request.getPassword());
 
-        return new SuccessEmptyDtoResponse();
+        return SuccessEmptyDtoResponse.makeNewInstance();
+    }
+
+    public DtoResponse deleteEmployee(DeleteEmployeeDtoRequest request) {
+        try {
+            new PersonExistenceValidator(new PersonExistenceCheckerImpl(dataBase)).validateEmployeeUUID(request.getUuid());
+        } catch (InvalidRequestException exception) {
+            return ErrorDtoResponse.fromException(exception);
+        }
+        dataBase.deleteEmployeeByUUID(request.getUuid());
+
+        return SuccessEmptyDtoResponse.makeNewInstance();
+    }
+
+    public DtoResponse deleteEmployer(DeleteEmployerDtoRequest request) {
+        try {
+            new PersonExistenceValidator(new PersonExistenceCheckerImpl(dataBase)).validateEmployerUUID(request.getUuid());
+        } catch (InvalidRequestException exception) {
+            return ErrorDtoResponse.fromException(exception);
+        }
+        dataBase.deleteEmployerByUUID(request.getUuid());
+
+        return SuccessEmptyDtoResponse.makeNewInstance();
     }
 }

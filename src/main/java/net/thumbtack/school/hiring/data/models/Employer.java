@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Employer extends AbstractPerson {
     private String companyName, address;
-    private List<Vacation> vacations;
+    private List<Vacancy> vacancies;
 
     public Employer(String firstName, String lastName, String patronymic, String login, String email, String password,
                     String companyName, String address) {
         super(firstName, lastName, patronymic, login, email, password);
         setCompanyName(companyName);
         setAddress(address);
-        vacations = new ArrayList<>();
+        vacancies = new ArrayList<>();
     }
 
     public void setCompanyName(String companyName) {
@@ -23,7 +23,7 @@ public class Employer extends AbstractPerson {
         this.address = address;
     }
 
-    public List<Vacation> getVacations() {
-        return vacations;
+    public List<Vacancy> getVacancies() {
+        return vacancies;
     }
 }

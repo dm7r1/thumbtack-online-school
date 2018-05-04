@@ -2,7 +2,7 @@ package net.thumbtack.school.hiring.data;
 
 import net.thumbtack.school.hiring.data.models.Employee;
 import net.thumbtack.school.hiring.data.models.Employer;
-import net.thumbtack.school.hiring.data.models.Vacation;
+import net.thumbtack.school.hiring.data.models.Vacancy;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 class DataStorage {
-    private Map<UUID, List<Vacation>> vacations;
+    private Map<UUID, List<Vacancy>> vacations;
     private Map<UUID,Employee> employees;
     private Map<UUID,Employer> employers;
 
@@ -20,7 +20,7 @@ class DataStorage {
         employers = new HashMap<>();
     }
 
-    Map<UUID, List<Vacation>> getVacations() {
+    Map<UUID, List<Vacancy>> getVacations() {
         return vacations;
         }
 

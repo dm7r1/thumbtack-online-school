@@ -37,16 +37,21 @@ public class PersonInfoRequestsValidator {
     }
 
     private void validatePersonChangingInfo(String firstName, String lastName, String patronymic, String email, String password) throws InvalidRequestException {
-        if(!isValidFirstName(firstName))
-            throw new InvalidRequestException(InvalidRequestErrors.INVALID_FIRST_NAME);
-        if(!isValidLastName(lastName))
-            throw new InvalidRequestException(InvalidRequestErrors.INVALID_LAST_NAME);
-        if(!isValidPatronymic(patronymic))
-            throw new InvalidRequestException(InvalidRequestErrors.INVALID_PATRONYMIC);
-        if(!isValidEmail(email))
-            throw new InvalidRequestException(InvalidRequestErrors.INVALID_EMAIL);
-        if(!isValidPassword(password))
-            throw new InvalidRequestException(InvalidRequestErrors.INVALID_PASSWORD);
+        if(firstName != null)
+            if(!isValidFirstName(firstName))
+                throw new InvalidRequestException(InvalidRequestErrors.INVALID_FIRST_NAME);
+        if(lastName != null)
+            if(!isValidLastName(lastName))
+                throw new InvalidRequestException(InvalidRequestErrors.INVALID_LAST_NAME);
+        if(patronymic != null)
+            if(!isValidPatronymic(patronymic))
+                throw new InvalidRequestException(InvalidRequestErrors.INVALID_PATRONYMIC);
+        if(email != null)
+            if(!isValidEmail(email))
+                throw new InvalidRequestException(InvalidRequestErrors.INVALID_EMAIL);
+        if(password != null)
+            if(!isValidPassword(password))
+                throw new InvalidRequestException(InvalidRequestErrors.INVALID_PASSWORD);
     }
 
     public void validateEmployeeChangingInfo(String firstName, String lastName, String patronymic, String email, String password) throws InvalidRequestException {
@@ -55,10 +60,12 @@ public class PersonInfoRequestsValidator {
 
     public void validateEmployerChangingInfo(String firstName, String lastName, String patronymic, String email, String password, String companyName, String address) throws InvalidRequestException {
        validatePersonChangingInfo(firstName, lastName, patronymic, email, password);
-        if(!isValidCompanyName(companyName))
-            throw new InvalidRequestException(InvalidRequestErrors.INVALID_COMPANY_NAME);
-        if(!isValidAddress(address))
-            throw new InvalidRequestException(InvalidRequestErrors.INVALID_ADDRESS);
+       if(companyName != null)
+            if(!isValidCompanyName(companyName))
+                throw new InvalidRequestException(InvalidRequestErrors.INVALID_COMPANY_NAME);
+       if(address != null)
+            if(!isValidAddress(address))
+                throw new InvalidRequestException(InvalidRequestErrors.INVALID_ADDRESS);
     }
 
     public boolean isValidFirstName(String firstName) {

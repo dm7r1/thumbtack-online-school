@@ -1,6 +1,6 @@
 package net.thumbtack.school.hiring.data.models.requests.base;
 
-public class AbstractChangePersonInfoDtoRequest extends AbstractExistingEmployeeDirectedDtoRequest {
+public class AbstractChangePersonInfoDtoRequest extends AbstractExistingPersonDirectedDtoRequest {
     private String firstName, lastName, patronymic, email, password;
 
     public String getFirstName() {

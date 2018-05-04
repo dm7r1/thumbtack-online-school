@@ -10,7 +10,10 @@ public enum InvalidRequestErrors {
     INVALID_COMPANY_NAME("invalid company name string"),
     INVALID_ADDRESS("invalid address string"),
     INVALID_TOKEN("invalid token"),
-    NONEXISTENT_TOKEN("nobody has such token")
+    NONEXISTENT_TOKEN("nobody has such a token"),
+    INVALID_VACANCY_NAME("invalid vacancy name string"),
+    INVALID_PAYMENT("invalid payment"),
+    INVALID_REQUIREMENTS("invalid requirements")
     ;
 
     String description;

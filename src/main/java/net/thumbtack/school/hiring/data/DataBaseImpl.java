@@ -2,7 +2,7 @@ package net.thumbtack.school.hiring.data;
 
 import net.thumbtack.school.hiring.data.models.Employee;
 import net.thumbtack.school.hiring.data.models.Employer;
-import net.thumbtack.school.hiring.data.models.Vacation;
+import net.thumbtack.school.hiring.data.models.Vacancy;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -28,8 +28,8 @@ public class DataBaseImpl implements DataBase {
         return uuid;
     }
 
-    public void insertVacation(UUID employerUUID, Vacation vacation) {
-        dataStorage.getVacations().get(employerUUID).add(vacation);
+    public void insertVacancy(UUID employerUUID, Vacancy vacancy) {
+        dataStorage.getVacations().get(employerUUID).add(vacancy);
     }
 
     public Employee getEmployeeByUUID(UUID uuid) {
@@ -48,5 +48,15 @@ public class DataBaseImpl implements DataBase {
     @Override
     public boolean employerExists(UUID uuid) {
         return dataStorage.getEmployers().containsKey(uuid);
+    }
+
+    @Override
+    public void deleteEmployeeByUUID(UUID uuid) {
+        dataStorage.getEmployees().remove(uuid);
+    }
+
+    @Override
+    public void deleteEmployerByUUID(UUID uuid) {
+        dataStorage.getEmployers().remove(uuid);
     }
 }
