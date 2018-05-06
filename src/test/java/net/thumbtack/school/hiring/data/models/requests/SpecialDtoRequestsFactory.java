@@ -1,9 +1,8 @@
 package net.thumbtack.school.hiring.data.models.requests;
 
-import net.thumbtack.school.hiring.data.models.Requirement;
+import net.thumbtack.school.hiring.data.models.RequirementProperties;
+import net.thumbtack.school.hiring.data.models.RequirementsList;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class SpecialDtoRequestsFactory {
@@ -21,8 +20,8 @@ public class SpecialDtoRequestsFactory {
     }
 
     public static AddVacancyDtoRequest makeValidAddVacancyDtoRequest(UUID token) {
-        Map<String, Requirement> requirements = new HashMap<>();
-        requirements.put("skillName", new Requirement(1, false));
+        RequirementsList requirements = new RequirementsList();
+        requirements.addRequirement("skillName", new RequirementProperties(1, false));
         return DtoRequestsFactory.makeAddVacancyDtoRequest(token, "vacancyName", 1, requirements);
     }
 }

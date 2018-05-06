@@ -1,45 +1,45 @@
 package net.thumbtack.school.hiring.data.models.requests.base;
 
 public class AbstractChangePersonInfoDtoRequest extends AbstractExistingPersonDirectedDtoRequest {
-    private String firstName, lastName, patronymic, email, password;
+    private String newFirstName, newLastName, newPatronymic, newEmail, newPassword;
 
-    public String getFirstName() {
-        return firstName;
+    public String getNewFirstName() {
+        return newFirstName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getNewLastName() {
+        return newLastName;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public String getNewPatronymic() {
+        return newPatronymic;
     }
 
-    public String getEmail() {
-        return email;
+    public String getNewEmail() {
+        return newEmail;
     }
 
-    public String getPassword() {
-        return password;
+    public String getNewPassword() {
+        return newPassword;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setNewFirstName(String newFirstName) {
+        this.newFirstName = newFirstName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setNewLastName(String newLastName) {
+        this.newLastName = newLastName;
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setNewPatronymic(String newPatronymic) {
+        this.newPatronymic = newPatronymic;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setNewEmail(String newEmail) {
+        this.newEmail = newEmail;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }

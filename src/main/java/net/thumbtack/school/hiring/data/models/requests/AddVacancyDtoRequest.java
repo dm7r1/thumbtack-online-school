@@ -1,14 +1,16 @@
 package net.thumbtack.school.hiring.data.models.requests;
 
-import net.thumbtack.school.hiring.data.models.Requirement;
+import net.thumbtack.school.hiring.data.models.RequirementProperties;
+import net.thumbtack.school.hiring.data.models.RequirementsList;
 import net.thumbtack.school.hiring.data.models.requests.base.AbstractExistingPersonDirectedDtoRequest;
 
 import java.util.Map;
 
+
 public class AddVacancyDtoRequest extends AbstractExistingPersonDirectedDtoRequest {
     private String vacancyName;
-    private int payment;
-    private Map<String, Requirement> requirements;
+    private Integer payment;
+    private Map<String, RequirementProperties> requirements;
 
     public String getVacancyName() {
         return vacancyName;
@@ -18,19 +20,19 @@ public class AddVacancyDtoRequest extends AbstractExistingPersonDirectedDtoReque
         this.vacancyName = vacancyName;
     }
 
-    public int getPayment() {
+    public Integer getPayment() {
         return payment;
     }
 
-    public void setPayment(int payment) {
+    public void setPayment(Integer payment) {
         this.payment = payment;
     }
 
-    public Map<String, Requirement> getRequirements() {
-        return requirements;
+    public RequirementsList getRequirements() {
+        return RequirementsList.fromMap(requirements);
     }
 
-    public void setRequirements(Map<String, Requirement> requirements) {
-        this.requirements = requirements;
+    public void setRequirements(RequirementsList requirements) {
+        this.requirements = requirements.toMap();
     }
 }

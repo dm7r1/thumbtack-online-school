@@ -1,6 +1,6 @@
 package net.thumbtack.school.hiring.data.models.responses;
 
-import net.thumbtack.school.hiring.data.models.InvalidRequestException;
+import net.thumbtack.school.hiring.data.exceptions.InvalidRequestException;
 
 public class ErrorDtoResponse implements DtoResponse {
     private String error;

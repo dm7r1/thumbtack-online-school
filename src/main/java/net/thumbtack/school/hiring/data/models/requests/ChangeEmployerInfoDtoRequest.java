@@ -3,21 +3,21 @@ package net.thumbtack.school.hiring.data.models.requests;
 import net.thumbtack.school.hiring.data.models.requests.base.AbstractChangePersonInfoDtoRequest;
 
 public class ChangeEmployerInfoDtoRequest extends AbstractChangePersonInfoDtoRequest {
-    private String companyName, address;
+    private String newCompanyName, newAddress;
 
-    public String getCompanyName() {
-        return companyName;
+    public String getNewCompanyName() {
+        return newCompanyName;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setNewCompanyName(String newCompanyName) {
+        this.newCompanyName = newCompanyName;
     }
 
-    public String getAddress() {
-        return address;
+    public String getNewAddress() {
+        return newAddress;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setNewAddress(String newAddress) {
+        this.newAddress = newAddress;
     }
 }

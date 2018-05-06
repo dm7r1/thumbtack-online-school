@@ -26,4 +26,8 @@ public class Employer extends AbstractPerson {
     public List<Vacancy> getVacancies() {
         return vacancies;
     }
+
+    public void addVacancy(Vacancy vacancy) {
+        vacancies.add(vacancy);
+    }
 }

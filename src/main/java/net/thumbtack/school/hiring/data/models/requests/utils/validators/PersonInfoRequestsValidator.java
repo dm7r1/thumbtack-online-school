@@ -1,7 +1,7 @@
-package net.thumbtack.school.hiring.data.models.requests.utils;
+package net.thumbtack.school.hiring.data.models.requests.utils.validators;
 
-import net.thumbtack.school.hiring.data.models.InvalidRequestErrors;
-import net.thumbtack.school.hiring.data.models.InvalidRequestException;
+import net.thumbtack.school.hiring.data.exceptions.InvalidRequestErrors;
+import net.thumbtack.school.hiring.data.exceptions.InvalidRequestException;
 import org.apache.commons.validator.routines.EmailValidator;
 
 

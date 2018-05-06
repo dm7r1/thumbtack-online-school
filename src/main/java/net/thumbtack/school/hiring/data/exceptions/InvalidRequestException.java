@@ -1,4 +1,4 @@
-package net.thumbtack.school.hiring.data.models;
+package net.thumbtack.school.hiring.data.exceptions;
 
 public class InvalidRequestException extends Exception {
     private InvalidRequestErrors error;

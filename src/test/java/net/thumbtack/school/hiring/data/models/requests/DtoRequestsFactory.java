@@ -1,9 +1,10 @@
 package net.thumbtack.school.hiring.data.models.requests;
 
 
-import net.thumbtack.school.hiring.data.models.Requirement;
+import net.thumbtack.school.hiring.data.models.RequirementsList;
+import net.thumbtack.school.hiring.data.models.SkillsList;
 
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 public class DtoRequestsFactory {
@@ -37,11 +38,11 @@ public class DtoRequestsFactory {
     public static ChangeEmployeeInfoDtoRequest makeChangeEmployeeInfoDtoRequest(UUID token, String firstName, String lastName, String patronymic, String email, String password) {
         ChangeEmployeeInfoDtoRequest request = new ChangeEmployeeInfoDtoRequest();
         request.setUuid(token);
-        request.setFirstName(firstName);
-        request.setLastName(lastName);
-        request.setPatronymic(patronymic);
-        request.setEmail(email);
-        request.setPassword(password);
+        request.setNewFirstName(firstName);
+        request.setNewLastName(lastName);
+        request.setNewPatronymic(patronymic);
+        request.setNewEmail(email);
+        request.setNewPassword(password);
 
         return request;
     }
@@ -50,13 +51,13 @@ public class DtoRequestsFactory {
                                                String companyName, String address) {
         ChangeEmployerInfoDtoRequest request = new ChangeEmployerInfoDtoRequest();
         request.setUuid(token);
-        request.setFirstName(firstName);
-        request.setLastName(lastName);
-        request.setPatronymic(patronymic);
-        request.setEmail(email);
-        request.setPassword(password);
-        request.setCompanyName(companyName);
-        request.setAddress(address);
+        request.setNewFirstName(firstName);
+        request.setNewLastName(lastName);
+        request.setNewPatronymic(patronymic);
+        request.setNewEmail(email);
+        request.setNewPassword(password);
+        request.setNewCompanyName(companyName);
+        request.setNewAddress(address);
 
         return request;
     }
@@ -75,12 +76,56 @@ public class DtoRequestsFactory {
         return request;
     }
 
-    public static AddVacancyDtoRequest makeAddVacancyDtoRequest(UUID token, String vacancyName, int payment, Map<String, Requirement> requirements) {
+    public static AddVacancyDtoRequest makeAddVacancyDtoRequest(UUID token, String vacancyName, Integer payment, RequirementsList requirements) {
         AddVacancyDtoRequest request = new AddVacancyDtoRequest();
         request.setUuid(token);
         request.setVacancyName(vacancyName);
         request.setPayment(payment);
         request.setRequirements(requirements);
+
+        return request;
+    }
+
+    public static DeleteVacancyDtoRequest makeDeleteVacancyDtoRequest(UUID token, Integer vacancyNumber) {
+        DeleteVacancyDtoRequest request = new DeleteVacancyDtoRequest();
+        request.setUuid(token);
+        request.setVacancyNumber(vacancyNumber);
+
+        return request;
+    }
+
+    public static GetVacanciesDtoRequest makeGetVacanciesDtoRequest(UUID token) {
+        GetVacanciesDtoRequest request = new GetVacanciesDtoRequest();
+        request.setUuid(token);
+
+        return request;
+    }
+
+    public static ChangeVacancyDtoRequest makeChangeVacancyDtoRequest(UUID token, Integer vacancyNumber, String newVacancyName, Integer newPayment,
+                                                                      RequirementsList newOrChangedRequirements, List<String> requirementsForDeletingNames) {
+        ChangeVacancyDtoRequest request = new ChangeVacancyDtoRequest();
+        request.setUuid(token);
+        request.setVacancyNumber(vacancyNumber);
+        request.setNewVacancyName(newVacancyName);
+        request.setNewPayment(newPayment);
+        request.setNewOrChangedRequirements(newOrChangedRequirements);
+        request.setRequirementsForDeletingNames(requirementsForDeletingNames);
+
+        return request;
+    }
+
+    public static ChangeSkillsDtoRequest makeChangeSkillsDtoRequest(UUID token, SkillsList newOrChangedSkills, List<String> skillsForDeletingNames) {
+        ChangeSkillsDtoRequest request = new ChangeSkillsDtoRequest();
+        request.setUuid(token);
+        request.setNewOrChangedSkills(newOrChangedSkills);
+        request.setSkillsForDeletingNames(skillsForDeletingNames);
+
+        return request;
+    }
+
+    public static GetSkillsDtoRequest makeGetSkillsDtoRequest(UUID token) {
+        GetSkillsDtoRequest request = new GetSkillsDtoRequest();
+        request.setUuid(token);
 
         return request;
     }

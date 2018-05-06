@@ -1,4 +1,4 @@
-package net.thumbtack.school.hiring.data.models;
+package net.thumbtack.school.hiring.data.exceptions;
 
 public enum InvalidRequestErrors {
     INVALID_LOGIN("invalid login string"),
@@ -13,7 +13,11 @@ public enum InvalidRequestErrors {
     NONEXISTENT_TOKEN("nobody has such a token"),
     INVALID_VACANCY_NAME("invalid vacancy name string"),
     INVALID_PAYMENT("invalid payment"),
-    INVALID_REQUIREMENTS("invalid requirements")
+    INVALID_REQUIREMENTS("invalid requirements"),
+    NONEXISTENT_VACANCY("nonexistent employer uuid, vacancy number pair"),
+    NONEXISTENT_VACANCY_REQUIREMENT_PAIR("this vacancy doesnt contain such requirement"),
+    INVALID_SKILLS("invalid skills"),
+    NONEXISTENT_SKILL("this employee doesnt have such skill")
     ;
 
     String description;

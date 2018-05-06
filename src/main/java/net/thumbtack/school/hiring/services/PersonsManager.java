@@ -3,11 +3,11 @@ package net.thumbtack.school.hiring.services;
 import net.thumbtack.school.hiring.data.DataBase;
 import net.thumbtack.school.hiring.data.models.Employee;
 import net.thumbtack.school.hiring.data.models.Employer;
-import net.thumbtack.school.hiring.data.models.InvalidRequestException;
+import net.thumbtack.school.hiring.data.exceptions.InvalidRequestException;
 import net.thumbtack.school.hiring.data.models.requests.*;
-import net.thumbtack.school.hiring.data.models.requests.utils.PersonExistenceCheckerImpl;
-import net.thumbtack.school.hiring.data.models.requests.utils.PersonExistenceValidator;
-import net.thumbtack.school.hiring.data.models.requests.utils.PersonInfoRequestsValidator;
+import net.thumbtack.school.hiring.data.models.requests.utils.checkers.ModelsExistenceCheckerImpl;
+import net.thumbtack.school.hiring.data.models.requests.utils.validators.ModelsExistenceValidator;
+import net.thumbtack.school.hiring.data.models.requests.utils.validators.PersonInfoRequestsValidator;
 import net.thumbtack.school.hiring.data.models.responses.DtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.ErrorDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.SuccessEmptyDtoResponse;
@@ -17,14 +17,18 @@ import java.util.UUID;
 
 public class PersonsManager {
     private DataBase dataBase;
+    private ModelsExistenceValidator modelsExistenceValidator;
+    private PersonInfoRequestsValidator personInfoRequestsValidator;
 
     public PersonsManager(DataBase dataBase) {
         this.dataBase = dataBase;
+        this.modelsExistenceValidator = new ModelsExistenceValidator(new ModelsExistenceCheckerImpl(dataBase));
+        this.personInfoRequestsValidator = new PersonInfoRequestsValidator();
     }
 
     public DtoResponse registerEmployee(RegisterEmployeeDtoRequest request) {
         try {
-            new PersonInfoRequestsValidator().validateEmployeeRegistrationInfo(
+            personInfoRequestsValidator.validateEmployeeRegistrationInfo(
                     request.getFirstName(),
                     request.getLastName(),
                     request.getPatronymic(),
@@ -49,7 +53,7 @@ public class PersonsManager {
 
     public DtoResponse registerEmployer(RegisterEmployerDtoRequest request) {
         try {
-            new PersonInfoRequestsValidator().validateEmployerRegistrationInfo(
+            personInfoRequestsValidator.validateEmployerRegistrationInfo(
                     request.getFirstName(),
                     request.getLastName(),
                     request.getPatronymic(),
@@ -78,71 +82,71 @@ public class PersonsManager {
 
     public DtoResponse changeEmployerInfo(ChangeEmployerInfoDtoRequest request) {
         try {
-            new PersonExistenceValidator(new PersonExistenceCheckerImpl(dataBase)).validateEmployerUUID(request.getUuid());
-            new PersonInfoRequestsValidator().validateEmployerChangingInfo(
-                    request.getFirstName(),
-                    request.getLastName(),
-                    request.getPatronymic(),
-                    request.getEmail(),
-                    request.getPassword(),
-                    request.getCompanyName(),
-                    request.getAddress()
+            modelsExistenceValidator.validateEmployerUUID(request.getUuid());
+            personInfoRequestsValidator.validateEmployerChangingInfo(
+                    request.getNewFirstName(),
+                    request.getNewLastName(),
+                    request.getNewPatronymic(),
+                    request.getNewEmail(),
+                    request.getNewPassword(),
+                    request.getNewCompanyName(),
+                    request.getNewAddress()
             );
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }
         Employer employer = dataBase.getEmployerByUUID(request.getUuid());
 
-        if(request.getFirstName() != null)
-            employer.setFirstName(request.getFirstName());
-        if(request.getLastName() != null)
-            employer.setLastName(request.getLastName());
-        if(request.getPatronymic() != null)
-            employer.setPatronymic(request.getPatronymic());
-        if(request.getEmail() != null)
-            employer.setEmail(request.getEmail());
-        if(request.getPassword() != null)
-            employer.setPassword(request.getPassword());
-        if(request.getCompanyName() != null)
-            employer.setCompanyName(request.getCompanyName());
-        if(request.getAddress() != null)
-            employer.setAddress(request.getAddress());
+        if(request.getNewFirstName() != null)
+            employer.setFirstName(request.getNewFirstName());
+        if(request.getNewLastName() != null)
+            employer.setLastName(request.getNewLastName());
+        if(request.getNewPatronymic() != null)
+            employer.setPatronymic(request.getNewPatronymic());
+        if(request.getNewEmail() != null)
+            employer.setEmail(request.getNewEmail());
+        if(request.getNewPassword() != null)
+            employer.setPassword(request.getNewPassword());
+        if(request.getNewCompanyName() != null)
+            employer.setCompanyName(request.getNewCompanyName());
+        if(request.getNewAddress() != null)
+            employer.setAddress(request.getNewAddress());
 
         return SuccessEmptyDtoResponse.makeNewInstance();
     }
 
     public DtoResponse changeEmployeeInfo(ChangeEmployeeInfoDtoRequest request) {
         try {
-            new PersonExistenceValidator(new PersonExistenceCheckerImpl(dataBase)).validateEmployeeUUID(request.getUuid());
+            modelsExistenceValidator.validateEmployeeUUID(request.getUuid());
             new PersonInfoRequestsValidator().validateEmployeeChangingInfo(
-                    request.getFirstName(),
-                    request.getLastName(),
-                    request.getPatronymic(),
-                    request.getEmail(),
-                    request.getPassword()
+                    request.getNewFirstName(),
+                    request.getNewLastName(),
+                    request.getNewPatronymic(),
+                    request.getNewEmail(),
+                    request.getNewPassword()
             );
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }
         Employee employee = dataBase.getEmployeeByUUID(request.getUuid());
 
-        if(request.getFirstName() != null)
-            employee.setFirstName(request.getFirstName());
-        if(request.getLastName() != null)
-            employee.setLastName(request.getLastName());
-        if(request.getPatronymic() != null)
-            employee.setPatronymic(request.getPatronymic());
-        if(request.getEmail() != null)
-            employee.setEmail(request.getEmail());
-        if(request.getPassword() != null)
-            employee.setPassword(request.getPassword());
+        if(request.getNewFirstName() != null)
+            employee.setFirstName(request.getNewFirstName());
+        if(request.getNewLastName() != null)
+            employee.setLastName(request.getNewLastName());
+        if(request.getNewPatronymic() != null)
+            employee.setPatronymic(request.getNewPatronymic());
+        if(request.getNewEmail() != null)
+            employee.setEmail(request.getNewEmail());
+        if(request.getNewPassword() != null)
+            employee.setPassword(request.getNewPassword());
 
         return SuccessEmptyDtoResponse.makeNewInstance();
     }
 
     public DtoResponse deleteEmployee(DeleteEmployeeDtoRequest request) {
         try {
-            new PersonExistenceValidator(new PersonExistenceCheckerImpl(dataBase)).validateEmployeeUUID(request.getUuid());
+            modelsExistenceValidator.validateEmployeeUUID(request.getUuid());
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }
@@ -153,7 +157,7 @@ public class PersonsManager {
 
     public DtoResponse deleteEmployer(DeleteEmployerDtoRequest request) {
         try {
-            new PersonExistenceValidator(new PersonExistenceCheckerImpl(dataBase)).validateEmployerUUID(request.getUuid());
+            modelsExistenceValidator.validateEmployerUUID(request.getUuid());
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }

@@ -27,6 +27,8 @@ public class TestDeletePerson {
         responseJson = server.deleteEmployee(gson.toJson(DtoRequestsFactory.makeDeleteEmployeeDtoRequest(token)));
 
         assertEquals("success", gson.fromJson(responseJson, SuccessEmptyDtoResponse.class).getResult());
+
+        server.stopServer("");
     }
 
     @Test
@@ -40,6 +42,8 @@ public class TestDeletePerson {
         responseJson = server.deleteEmployer(gson.toJson(DtoRequestsFactory.makeDeleteEmployerDtoRequest(token)));
 
         assertEquals("success", gson.fromJson(responseJson, SuccessEmptyDtoResponse.class).getResult());
+
+        server.stopServer("");
     }
 
     @Test
@@ -52,6 +56,8 @@ public class TestDeletePerson {
         String responseJson = server.deleteEmployee(gson.toJson(DtoRequestsFactory.makeDeleteEmployeeDtoRequest(token)));
 
         assertNotNull(gson.fromJson(responseJson, ErrorDtoResponse.class).getError());
+
+        server.stopServer("");
     }
 
     @Test
@@ -64,5 +70,7 @@ public class TestDeletePerson {
         String responseJson = server.deleteEmployer(gson.toJson(DtoRequestsFactory.makeDeleteEmployerDtoRequest(token)));
 
         assertNotNull(gson.fromJson(responseJson, ErrorDtoResponse.class).getError());
+
+        server.stopServer("");
     }
 }

@@ -2,9 +2,11 @@ package net.thumbtack.school.hiring.data;
 
 import net.thumbtack.school.hiring.data.models.Employee;
 import net.thumbtack.school.hiring.data.models.Employer;
+import net.thumbtack.school.hiring.data.models.SkillsList;
 import net.thumbtack.school.hiring.data.models.Vacancy;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DataBaseImpl implements DataBase {
@@ -24,12 +26,11 @@ public class DataBaseImpl implements DataBase {
     {
         UUID uuid = UUID.randomUUID();
         dataStorage.getEmployers().put(uuid, employer);
-        dataStorage.getVacations().put(uuid, new ArrayList<>());
         return uuid;
     }
 
     public void insertVacancy(UUID employerUUID, Vacancy vacancy) {
-        dataStorage.getVacations().get(employerUUID).add(vacancy);
+        dataStorage.getEmployers().get(employerUUID).addVacancy(vacancy);
     }
 
     public Employee getEmployeeByUUID(UUID uuid) {
@@ -40,23 +41,35 @@ public class DataBaseImpl implements DataBase {
         return dataStorage.getEmployers().get(uuid);
     }
 
-    @Override
+    public Vacancy getVacancy(UUID uuid, int vacancyNumber) {
+        return dataStorage.getEmployers().get(uuid).getVacancies().get(vacancyNumber);
+    }
+
+    public List<Vacancy> getEmployerVacancies(UUID uuid) {
+        return dataStorage.getEmployers().get(uuid).getVacancies();
+    }
+
+    public SkillsList getEmployeeSkills(UUID uuid) {
+        return dataStorage.getEmployees().get(uuid).getSkills();
+    }
+
     public boolean employeeExists(UUID uuid) {
         return dataStorage.getEmployees().containsKey(uuid);
     }
 
-    @Override
     public boolean employerExists(UUID uuid) {
         return dataStorage.getEmployers().containsKey(uuid);
     }
 
-    @Override
     public void deleteEmployeeByUUID(UUID uuid) {
         dataStorage.getEmployees().remove(uuid);
     }
 
-    @Override
     public void deleteEmployerByUUID(UUID uuid) {
         dataStorage.getEmployers().remove(uuid);
+    }
+
+    public void deleteVacancy(UUID uuid, int vacancyNumber) {
+        dataStorage.getEmployers().get(uuid).getVacancies().remove(vacancyNumber);
     }
 }

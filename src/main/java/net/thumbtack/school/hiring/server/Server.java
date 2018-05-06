@@ -4,19 +4,23 @@ import com.google.gson.Gson;
 import net.thumbtack.school.hiring.data.DataBase;
 import net.thumbtack.school.hiring.data.DataBaseImpl;
 import net.thumbtack.school.hiring.data.models.requests.*;
+import net.thumbtack.school.hiring.data.models.responses.SuccessEmptyDtoResponse;
 import net.thumbtack.school.hiring.services.PersonsManager;
+import net.thumbtack.school.hiring.services.SkillsManager;
 import net.thumbtack.school.hiring.services.VacanciesManager;
 
 public class Server {
     private DataBase dataBase;
     private PersonsManager usersManager;
     private VacanciesManager vacanciesManager;
+    private SkillsManager skillsManager;
     private Gson gson;
 
     public Server() {
         dataBase = new DataBaseImpl();
         usersManager = new PersonsManager(dataBase);
         vacanciesManager = new VacanciesManager(dataBase);
+        skillsManager = new SkillsManager(dataBase);
         gson = new Gson();
     }
 
@@ -57,5 +61,30 @@ public class Server {
     public String addVacancy(String requestJsonString) {
         AddVacancyDtoRequest request = gson.fromJson(requestJsonString, AddVacancyDtoRequest.class);
         return gson.toJson(vacanciesManager.addVacancy(request));
+    }
+
+    public String deleteVacancy(String requestJsonString) {
+        DeleteVacancyDtoRequest request = gson.fromJson(requestJsonString, DeleteVacancyDtoRequest.class);
+        return gson.toJson(vacanciesManager.deleteVacancy(request));
+    }
+
+    public String getVacancies(String requestJsonString) {
+        GetVacanciesDtoRequest request = gson.fromJson(requestJsonString, GetVacanciesDtoRequest.class);
+        return gson.toJson(vacanciesManager.getVacancies(request));
+    }
+
+    public String changeVacancy(String requestJsonString) {
+        ChangeVacancyDtoRequest request = gson.fromJson(requestJsonString, ChangeVacancyDtoRequest.class);
+        return gson.toJson(vacanciesManager.changeVacancy(request));
+    }
+
+    public String changeSkills(String requestJsonString) {
+        ChangeSkillsDtoRequest request = gson.fromJson(requestJsonString, ChangeSkillsDtoRequest.class);
+        return gson.toJson(skillsManager.changeSkills(request));
+    }
+
+    public String getSkills(String requestJsonString) {
+        GetSkillsDtoRequest request = gson.fromJson(requestJsonString, GetSkillsDtoRequest.class);
+        return gson.toJson(skillsManager.getSkills(request));
     }
 }

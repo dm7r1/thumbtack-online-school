@@ -1,10 +1,10 @@
 package net.thumbtack.school.hiring.data.models;
 
-public class Requirement {
+public class RequirementProperties {
     private int lvl;
     private boolean required;
 
-    public Requirement(int lvl, boolean required) {
+    public RequirementProperties(int lvl, boolean required) {
         this.lvl = lvl;
         this.required = required;
     }
