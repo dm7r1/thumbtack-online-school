@@ -33,14 +33,11 @@ public class SkillsManager {
             return ErrorDtoResponse.fromException(exception);
         }
 
-        SkillsList employeeSkills = dataBase.getEmployeeSkills(request.getUuid());
         if(request.getSkillsForDeletingNames() != null)
-            for(String skillName: request.getSkillsForDeletingNames()) {
-                employeeSkills.deleteSkill(skillName);
-            }
+            dataBase.deleteEmployeeSkills(request.getUuid(), request.getSkillsForDeletingNames());
 
         if(request.getNewOrChangedSkills() != null)
-            employeeSkills.addSkills(request.getNewOrChangedSkills());
+            dataBase.addEmployeeSkills(request.getUuid(), request.getNewOrChangedSkills());
 
         return SuccessEmptyDtoResponse.makeNewInstance();
     }

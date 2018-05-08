@@ -63,7 +63,7 @@ public class VacanciesManager {
             return ErrorDtoResponse.fromException(exception);
         }
 
-        return VacanciesListDtoResponse.makeNewInstance(dataBase.getEmployerVacancies(request.getUuid()));
+        return VacanciesListDtoResponse.makeInstance(dataBase.getEmployerVacancies(request.getUuid()));
     }
 
     public DtoResponse changeVacancy(ChangeVacancyDtoRequest request) {
@@ -88,7 +88,7 @@ public class VacanciesManager {
             }
 
         if(request.getNewOrChangedRequirements() != null)
-            dataBase.getVacancy(request.getUuid(), request.getVacancyNumber()).addRequirements(request.getNewOrChangedRequirements());
+            dataBase.addVacancyRequirements(request.getUuid(), request.getVacancyNumber(), request.getNewOrChangedRequirements());
 
         return SuccessEmptyDtoResponse.makeNewInstance();
     }

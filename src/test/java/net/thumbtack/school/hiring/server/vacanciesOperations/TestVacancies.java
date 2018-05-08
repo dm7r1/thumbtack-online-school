@@ -15,9 +15,7 @@ import net.thumbtack.school.hiring.data.models.responses.VacanciesListDtoRespons
 import net.thumbtack.school.hiring.server.Server;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -147,7 +145,7 @@ public class TestVacancies {
             assertEquals(expectedRequirements.size(), actualRequirements.size());
             for(String requirementName: expectedRequirements.getRequirementsNamesSet()) {
                 assertEquals(expectedRequirements.getRequirementProperties(requirementName).getLvl(), actualRequirements.getRequirementProperties(requirementName).getLvl());
-                assertEquals(expectedRequirements.getRequirementProperties(requirementName).isRequired(), actualRequirements.getRequirementProperties(requirementName).isRequired());
+                assertEquals(expectedRequirements.getRequirementProperties(requirementName).isNecessary(), actualRequirements.getRequirementProperties(requirementName).isNecessary());
             }
         }
 
@@ -175,7 +173,7 @@ public class TestVacancies {
         newRequirementsForAdding.addRequirement("newReq1", new RequirementProperties(2, false));
         newRequirementsForAdding.addRequirement("newReq2", new RequirementProperties(1, true));
         newRequirementsForAdding.addRequirement("thisRequirementWillBeChanged", new RequirementProperties(1, true));
-        List<String> requirementsForDeletingNames = new ArrayList<>();
+        Set<String> requirementsForDeletingNames = new HashSet<>();
         requirementsForDeletingNames.add("req1");
         requirementsForDeletingNames.add("req3");
 
@@ -200,7 +198,7 @@ public class TestVacancies {
         assertEquals(expectedRequirements.size(), actualRequirements.size());
         for(String requirementName: expectedRequirements.getRequirementsNamesSet()) {
             assertEquals(expectedRequirements.getRequirementProperties(requirementName).getLvl(), actualRequirements.getRequirementProperties(requirementName).getLvl());
-            assertEquals(expectedRequirements.getRequirementProperties(requirementName).isRequired(), actualRequirements.getRequirementProperties(requirementName).isRequired());
+            assertEquals(expectedRequirements.getRequirementProperties(requirementName).isNecessary(), actualRequirements.getRequirementProperties(requirementName).isNecessary());
         }
 
         ChangeVacancyDtoRequest changeVacancyDtoRequestOnlyPayment = DtoRequestsFactory.makeChangeVacancyDtoRequest(
@@ -237,13 +235,16 @@ public class TestVacancies {
         ChangeVacancyDtoRequest changeVacancyDtoRequestWithInvalidVacancyNumber = DtoRequestsFactory.makeChangeVacancyDtoRequest(
                 token, -1, "vacancy2", null, null, null
         );
+        ChangeVacancyDtoRequest changeVacancyDtoRequestWithNullVacancyNumber = DtoRequestsFactory.makeChangeVacancyDtoRequest(
+                token, null, "vacancy2", null, null, null
+        );
         ChangeVacancyDtoRequest changeVacancyDtoRequestWithInvalidNewVacancyName = DtoRequestsFactory.makeChangeVacancyDtoRequest(
                 token, 0, "", null, null, null
         );
         ChangeVacancyDtoRequest changeVacancyDtoRequestWithInvalidNewPayment = DtoRequestsFactory.makeChangeVacancyDtoRequest(
                 token, 0, null, -1, null, null
         );
-        List<String> nonexistentRequirementsForDeletingNames = new ArrayList<>();
+        Set<String> nonexistentRequirementsForDeletingNames = new HashSet<>();
         nonexistentRequirementsForDeletingNames.add("nonexistentReq");
         ChangeVacancyDtoRequest changeVacancyDtoRequestWithNonexistentRequirementsForDeletingNames = DtoRequestsFactory.makeChangeVacancyDtoRequest(
                 token, 0, null, null, null, nonexistentRequirementsForDeletingNames
@@ -255,7 +256,7 @@ public class TestVacancies {
         );
 
         ChangeVacancyDtoRequest invalidRequests[] = {
-                changeNonexistentVacancyDtoRequest, changeVacancyDtoRequestWithInvalidVacancyNumber, changeVacancyDtoRequestWithInvalidNewVacancyName,
+                changeNonexistentVacancyDtoRequest, changeVacancyDtoRequestWithInvalidVacancyNumber, changeVacancyDtoRequestWithNullVacancyNumber, changeVacancyDtoRequestWithInvalidNewVacancyName,
                 changeVacancyDtoRequestWithInvalidNewPayment, changeVacancyDtoRequestWithNonexistentRequirementsForDeletingNames,
                 changeVacancyDtoRequestWithInvalidRequirementsForAddingNames
         };

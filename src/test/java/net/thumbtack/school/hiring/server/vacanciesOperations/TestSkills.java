@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import net.thumbtack.school.hiring.data.models.SkillsList;
 import net.thumbtack.school.hiring.data.models.requests.ChangeSkillsDtoRequest;
 import net.thumbtack.school.hiring.data.models.requests.DtoRequestsFactory;
-import net.thumbtack.school.hiring.data.models.requests.GetSkillsDtoRequest;
 import net.thumbtack.school.hiring.data.models.requests.SpecialDtoRequestsFactory;
 import net.thumbtack.school.hiring.data.models.responses.ErrorDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.SkillsListDtoResponse;
@@ -12,9 +11,7 @@ import net.thumbtack.school.hiring.data.models.responses.SuccessfulRegisteredDto
 import net.thumbtack.school.hiring.server.Server;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -49,7 +46,7 @@ public class TestSkills {
         skillsForAddingOrChanging.addSkill("thisSkillWillBeChanged", 1);
         skillsForAddingOrChanging.addSkill("newSkill", 5);
 
-        List<String> skillsForDeleting = new ArrayList<>();
+        Set<String> skillsForDeleting = new HashSet<>();
         skillsForDeleting.add("thisSkillWillBeDeleted");
         changeSkillsDtoRequest = DtoRequestsFactory.makeChangeSkillsDtoRequest(token, skillsForAddingOrChanging, skillsForDeleting);
         server.changeSkills(gson.toJson(changeSkillsDtoRequest));
@@ -59,7 +56,7 @@ public class TestSkills {
 
         SkillsList expectedSkills = skillsForAdding;
         for(String skillName: skillsForDeleting)
-            expectedSkills.deleteSkill(skillName);
+            expectedSkills.removeSkill(skillName);
         expectedSkills.addSkills(skillsForAddingOrChanging);
 
         assertEquals(expectedSkills.size(), receivedSkills.size());
@@ -123,7 +120,7 @@ public class TestSkills {
         UUID token = gson.fromJson(server.registerEmployee(
                 gson.toJson(SpecialDtoRequestsFactory.makeValidRegisterEmployeeDtoRequest())), SuccessfulRegisteredDtoResponse.class).getToken();
 
-        List<String> skillsForDeleting = new ArrayList<>();
+        Set<String> skillsForDeleting = new HashSet<>();
         skillsForDeleting.add("nonexistent skill");
         String responseJson = server.changeSkills(gson.toJson(DtoRequestsFactory.makeChangeSkillsDtoRequest(token, null, skillsForDeleting)));
         assertNotNull(gson.fromJson(responseJson, ErrorDtoResponse.class).getError());

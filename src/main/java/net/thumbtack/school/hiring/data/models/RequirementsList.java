@@ -21,6 +21,14 @@ public class RequirementsList {
         return requirements.get(requirementName);
     }
 
+    public int getRequirementLvl(String requirementName) {
+        return getRequirementProperties(requirementName).getLvl();
+    }
+
+    public boolean isRequirementNecessary(String requirementName) {
+        return getRequirementProperties(requirementName).isNecessary();
+    }
+
     public Set<String> getRequirementsNamesSet() {
         return requirements.keySet();
     }

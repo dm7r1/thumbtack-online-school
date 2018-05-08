@@ -4,15 +4,15 @@ import net.thumbtack.school.hiring.data.models.RequirementProperties;
 import net.thumbtack.school.hiring.data.models.RequirementsList;
 import net.thumbtack.school.hiring.data.models.requests.base.AbstractExistingPersonDirectedDtoRequest;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ChangeVacancyDtoRequest extends AbstractExistingPersonDirectedDtoRequest {
     private Integer vacancyNumber;
     private String newVacancyName;
     private Integer newPayment;
     private Map<String, RequirementProperties> newOrChangedRequirements;
-    private List<String> requirementsForDeletingNames;
+    private Set<String> requirementsForDeletingNames;
 
     public Integer getVacancyNumber() {
         return vacancyNumber;
@@ -52,11 +52,11 @@ public class ChangeVacancyDtoRequest extends AbstractExistingPersonDirectedDtoRe
             this.newOrChangedRequirements = null;
     }
 
-    public List<String> getRequirementsForDeletingNames() {
+    public Set<String> getRequirementsForDeletingNames() {
         return requirementsForDeletingNames;
     }
 
-    public void setRequirementsForDeletingNames(List<String> requirementsForDeletingNames) {
+    public void setRequirementsForDeletingNames(Set<String> requirementsForDeletingNames) {
         this.requirementsForDeletingNames = requirementsForDeletingNames;
     }
 }

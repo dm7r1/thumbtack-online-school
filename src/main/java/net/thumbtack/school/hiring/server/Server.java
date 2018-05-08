@@ -5,15 +5,15 @@ import net.thumbtack.school.hiring.data.DataBase;
 import net.thumbtack.school.hiring.data.DataBaseImpl;
 import net.thumbtack.school.hiring.data.models.requests.*;
 import net.thumbtack.school.hiring.data.models.responses.SuccessEmptyDtoResponse;
-import net.thumbtack.school.hiring.services.PersonsManager;
-import net.thumbtack.school.hiring.services.SkillsManager;
-import net.thumbtack.school.hiring.services.VacanciesManager;
+import net.thumbtack.school.hiring.services.*;
 
 public class Server {
     private DataBase dataBase;
     private PersonsManager usersManager;
     private VacanciesManager vacanciesManager;
     private SkillsManager skillsManager;
+    private GlobalInfoManager globalInfoManager;
+    private SearchManager searchManager;
     private Gson gson;
 
     public Server() {
@@ -21,6 +21,8 @@ public class Server {
         usersManager = new PersonsManager(dataBase);
         vacanciesManager = new VacanciesManager(dataBase);
         skillsManager = new SkillsManager(dataBase);
+        globalInfoManager = new GlobalInfoManager(dataBase);
+        searchManager = new SearchManager(dataBase);
         gson = new Gson();
     }
 
@@ -86,5 +88,20 @@ public class Server {
     public String getSkills(String requestJsonString) {
         GetSkillsDtoRequest request = gson.fromJson(requestJsonString, GetSkillsDtoRequest.class);
         return gson.toJson(skillsManager.getSkills(request));
+    }
+
+    public String getDefinedSkills(String requestJsonString) {
+        GetDefinedSkillsDtoRequest request = gson.fromJson(requestJsonString, GetDefinedSkillsDtoRequest.class);
+        return gson.toJson(globalInfoManager.getDefinedSkills(request));
+    }
+
+    public String searchEmployeesByVacancy(String requestJsonString) {
+        SearchEmployeesByVacancyDtoRequest request = gson.fromJson(requestJsonString, SearchEmployeesByVacancyDtoRequest.class);
+        return gson.toJson(searchManager.searchEmployeesByVacancy(request));
+    }
+
+    public String searchVacanciesBySkills(String requestJsonString) {
+        SearchVacanciesBySkillsDtoRequest request = gson.fromJson(requestJsonString, SearchVacanciesBySkillsDtoRequest.class);
+        return gson.toJson(searchManager.searchVacanciesForEmployee(request));
     }
 }

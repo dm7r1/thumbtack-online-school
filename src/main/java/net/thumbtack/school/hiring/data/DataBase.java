@@ -1,11 +1,10 @@
 package net.thumbtack.school.hiring.data;
 
-import net.thumbtack.school.hiring.data.models.Employee;
-import net.thumbtack.school.hiring.data.models.Employer;
-import net.thumbtack.school.hiring.data.models.SkillsList;
-import net.thumbtack.school.hiring.data.models.Vacancy;
+import net.thumbtack.school.hiring.data.models.*;
+import net.thumbtack.school.hiring.services.special.search.EmployeeValuer;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -15,6 +14,10 @@ public interface DataBase {
     UUID insertEmployer(Employer employer);
 
     void insertVacancy(UUID employerUUID, Vacancy vacancy);
+
+    void addEmployeeSkills(UUID employeeUUID, SkillsList skills);
+
+    void addVacancyRequirements(UUID employerUUID, int vacancyNumber, RequirementsList requirements);
 
     Employee getEmployeeByUUID(UUID uuid);
 
@@ -26,6 +29,12 @@ public interface DataBase {
 
     SkillsList getEmployeeSkills(UUID uuid);
 
+    Set<String> getDefinedSkillsNames();
+
+    List<Employee> getEmployeesByVacancyRequirements(UUID employerUUID, int vacancyNumber, EmployeeValuer employeeValuer);
+
+    List<Vacancy> getVacanciesByEmployeeSkills(UUID employeeUUID, EmployeeValuer employeeValuer);
+
     boolean employerExists(UUID uuid);
 
     boolean employeeExists(UUID uuid);
@@ -35,4 +44,6 @@ public interface DataBase {
     void deleteEmployerByUUID(UUID uuid);
 
     void deleteVacancy(UUID uuid, int vacancyNumber);
+
+    void deleteEmployeeSkills(UUID employeeUUID, Set<String> skillsNames);
 }

@@ -44,4 +44,20 @@ abstract public class AbstractPerson {
     public String getPassword() {
         return password;
     }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }

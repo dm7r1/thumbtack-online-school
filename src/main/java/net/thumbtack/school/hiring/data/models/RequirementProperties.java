@@ -2,11 +2,11 @@ package net.thumbtack.school.hiring.data.models;
 
 public class RequirementProperties {
     private int lvl;
-    private boolean required;
+    private boolean necessary;
 
-    public RequirementProperties(int lvl, boolean required) {
+    public RequirementProperties(int lvl, boolean necessary) {
         this.lvl = lvl;
-        this.required = required;
+        this.necessary = necessary;
     }
 
     public int getLvl() {
@@ -17,11 +17,11 @@ public class RequirementProperties {
         this.lvl = lvl;
     }
 
-    public boolean isRequired() {
-        return required;
+    public boolean isNecessary() {
+        return necessary;
     }
 
-    public void setRequired(boolean required) {
-        this.required = required;
+    public void setNecessary(boolean necessary) {
+        this.necessary = necessary;
     }
 }

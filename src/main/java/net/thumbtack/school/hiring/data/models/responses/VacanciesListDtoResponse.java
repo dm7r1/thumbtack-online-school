@@ -9,7 +9,7 @@ import java.util.List;
 public class VacanciesListDtoResponse implements DtoResponse {
     private List<VacancyDto> vacancies;
 
-    public static VacanciesListDtoResponse makeNewInstance(List<Vacancy> vacancies) {
+    public static VacanciesListDtoResponse makeInstance(List<Vacancy> vacancies) {
         VacanciesListDtoResponse response = new VacanciesListDtoResponse();
         response.vacancies = new ArrayList<>(vacancies.size());
         for(Vacancy vacancy: vacancies) {

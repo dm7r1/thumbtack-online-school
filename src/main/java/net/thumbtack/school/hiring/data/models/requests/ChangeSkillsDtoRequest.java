@@ -3,18 +3,18 @@ package net.thumbtack.school.hiring.data.models.requests;
 import net.thumbtack.school.hiring.data.models.SkillsList;
 import net.thumbtack.school.hiring.data.models.requests.base.AbstractExistingPersonDirectedDtoRequest;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ChangeSkillsDtoRequest extends AbstractExistingPersonDirectedDtoRequest {
-    private List<String> skillsForDeletingNames;
+    private Set<String> skillsForDeletingNames;
     private Map<String, Integer> newOrChangedSkills;
 
-    public List<String> getSkillsForDeletingNames() {
+    public Set<String> getSkillsForDeletingNames() {
         return skillsForDeletingNames;
     }
 
-    public void setSkillsForDeletingNames(List<String> skillsForDeletingNames) {
+    public void setSkillsForDeletingNames(Set<String> skillsForDeletingNames) {
         this.skillsForDeletingNames = skillsForDeletingNames;
     }
 

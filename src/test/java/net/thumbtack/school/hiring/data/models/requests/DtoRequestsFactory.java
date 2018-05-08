@@ -3,8 +3,9 @@ package net.thumbtack.school.hiring.data.models.requests;
 
 import net.thumbtack.school.hiring.data.models.RequirementsList;
 import net.thumbtack.school.hiring.data.models.SkillsList;
+import net.thumbtack.school.hiring.services.special.search.SearchOptions;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class DtoRequestsFactory {
@@ -102,7 +103,7 @@ public class DtoRequestsFactory {
     }
 
     public static ChangeVacancyDtoRequest makeChangeVacancyDtoRequest(UUID token, Integer vacancyNumber, String newVacancyName, Integer newPayment,
-                                                                      RequirementsList newOrChangedRequirements, List<String> requirementsForDeletingNames) {
+                                                                      RequirementsList newOrChangedRequirements, Set<String> requirementsForDeletingNames) {
         ChangeVacancyDtoRequest request = new ChangeVacancyDtoRequest();
         request.setUuid(token);
         request.setVacancyNumber(vacancyNumber);
@@ -114,7 +115,7 @@ public class DtoRequestsFactory {
         return request;
     }
 
-    public static ChangeSkillsDtoRequest makeChangeSkillsDtoRequest(UUID token, SkillsList newOrChangedSkills, List<String> skillsForDeletingNames) {
+    public static ChangeSkillsDtoRequest makeChangeSkillsDtoRequest(UUID token, SkillsList newOrChangedSkills, Set<String> skillsForDeletingNames) {
         ChangeSkillsDtoRequest request = new ChangeSkillsDtoRequest();
         request.setUuid(token);
         request.setNewOrChangedSkills(newOrChangedSkills);
@@ -126,6 +127,30 @@ public class DtoRequestsFactory {
     public static GetSkillsDtoRequest makeGetSkillsDtoRequest(UUID token) {
         GetSkillsDtoRequest request = new GetSkillsDtoRequest();
         request.setUuid(token);
+
+        return request;
+    }
+
+    public static GetDefinedSkillsDtoRequest makeGetDefinedSkillsDtoRequest(UUID token) {
+        GetDefinedSkillsDtoRequest request = new GetDefinedSkillsDtoRequest();
+        request.setUuid(token);
+
+        return request;
+    }
+
+    public static SearchEmployeesByVacancyDtoRequest makeSearchEmployeesDtoRequest(UUID token, Integer vacancyNumber, Integer searchOptionCode) {
+        SearchEmployeesByVacancyDtoRequest request = new SearchEmployeesByVacancyDtoRequest();
+        request.setUuid(token);
+        request.setVacancyNumber(vacancyNumber);
+        request.setSearchOptionCode(searchOptionCode);
+
+        return request;
+    }
+
+    public static SearchVacanciesBySkillsDtoRequest makeSearchVacanciesDtoRequest(UUID token, Integer searchOptionCode) {
+        SearchVacanciesBySkillsDtoRequest request = new SearchVacanciesBySkillsDtoRequest();
+        request.setUuid(token);
+        request.setSearchOptionCode(searchOptionCode);
 
         return request;
     }

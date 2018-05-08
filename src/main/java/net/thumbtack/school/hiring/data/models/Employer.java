@@ -30,4 +30,12 @@ public class Employer extends AbstractPerson {
     public void addVacancy(Vacancy vacancy) {
         vacancies.add(vacancy);
     }
+
+    public void removeVacancy(int vacancyNumber) {
+        vacancies.remove(vacancyNumber);
+    }
+
+    public Vacancy getVacancy(int vacancyNumber) {
+        return vacancies.get(vacancyNumber);
+    }
 }

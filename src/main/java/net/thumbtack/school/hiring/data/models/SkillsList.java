@@ -37,8 +37,13 @@ public class SkillsList {
         }
     }
 
-    public void deleteSkill(String skillName) {
+    public void removeSkill(String skillName) {
         this.skills.remove(skillName);
+    }
+
+    public void removeSkills(Set<String> skillsNames) {
+        for(String skillName: skillsNames)
+            this.skills.remove(skillName);
     }
 
     public boolean skillExists(String skillName) {
