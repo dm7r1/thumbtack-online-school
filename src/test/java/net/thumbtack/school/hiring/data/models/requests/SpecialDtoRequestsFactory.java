@@ -11,14 +11,14 @@ public class SpecialDtoRequestsFactory {
     public static RegisterEmployeeDtoRequest makeValidRegisterEmployeeDtoRequest() {
         uniqueLoginModifier++;
         return DtoRequestsFactory.makeRegisterEmployeeDtoRequest(
-                "First", "Last", "Patronymic", "login" + Integer.toString(uniqueLoginModifier), "email@example.com", "password"
+                "First", "Last", "Patronymic", "login(FromFactory)" + Integer.toString(uniqueLoginModifier), "email@example.com", "password"
         );
     }
 
     public static RegisterEmployerDtoRequest makeValidRegisterEmployerDtoRequest() {
         uniqueLoginModifier++;
         return DtoRequestsFactory.makeRegisterEmployerDtoRequest(
-                "First", "Last", "Patronymic", "login" + Integer.toString(uniqueLoginModifier), "email@example.com", "password",
+                "First", "Last", "Patronymic", "login(FromFactory)" + Integer.toString(uniqueLoginModifier), "email@example.com", "password",
                 "companyName", "address"
         );
     }
