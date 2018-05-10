@@ -1,4 +1,4 @@
-package net.thumbtack.school.hiring.data.models.requests.utils.checkers;
+package net.thumbtack.school.hiring.data.models.requests.checkers;
 
 import net.thumbtack.school.hiring.data.DataBase;
 
@@ -33,5 +33,15 @@ public class ModelsExistenceCheckerImpl implements ModelsExistenceChecker {
     @Override
     public boolean skillExists(UUID employeeUuid, String skillName) {
         return dataBase.getEmployeeByUUID(employeeUuid).getSkills().skillExists(skillName);
+    }
+
+    @Override
+    public boolean loginIsBusy(String login) {
+        return dataBase.loginIsBusy(login);
+    }
+
+    @Override
+    public boolean loginBelongsEmployee(String login) {
+        return dataBase.loginBelongsEmployee(login);
     }
 }

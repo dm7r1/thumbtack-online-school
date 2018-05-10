@@ -1,31 +1,28 @@
 package net.thumbtack.school.hiring.server.searchOperations;
 
 import com.google.gson.Gson;
-import net.thumbtack.school.hiring.data.models.RequirementProperties;
-import net.thumbtack.school.hiring.data.models.RequirementsList;
-import net.thumbtack.school.hiring.data.models.SkillsList;
+import net.thumbtack.school.hiring.data.models.stored.RequirementProperties;
+import net.thumbtack.school.hiring.data.models.stored.RequirementsList;
+import net.thumbtack.school.hiring.data.models.stored.SkillsList;
 import net.thumbtack.school.hiring.data.models.requests.DtoRequestsFactory;
 import net.thumbtack.school.hiring.data.models.requests.SearchVacanciesBySkillsDtoRequest;
+import net.thumbtack.school.hiring.data.models.requests.SetVacancyActiveDtoRequest;
 import net.thumbtack.school.hiring.data.models.requests.SpecialDtoRequestsFactory;
 import net.thumbtack.school.hiring.data.models.responses.ErrorDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.RightVacanciesListDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.SuccessfulRegisteredDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.specialModels.ShortVacancyInfoDto;
 import net.thumbtack.school.hiring.server.Server;
-import net.thumbtack.school.hiring.server.searchOperations.specialModels.EnvironmentForEmployeesSearchTests;
 import net.thumbtack.school.hiring.server.searchOperations.specialModels.EnvironmentForVacationsSearchTests;
 import net.thumbtack.school.hiring.services.special.search.SearchOptions;
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
 public class TestVacanciesSearch {
-    public EnvironmentForVacationsSearchTests makeEnvironmentForTests() {
+    private EnvironmentForVacationsSearchTests makeEnvironmentForTests() {
         Server server = new Server();
         server.startServer("");
         Gson gson = new Gson();
@@ -60,11 +57,15 @@ public class TestVacanciesSearch {
         requirements = new RequirementsList();
         requirements.addRequirement("skillC", new RequirementProperties(5, true));
         server.addVacancy(gson.toJson(DtoRequestsFactory.makeAddVacancyDtoRequest(employerToken, "vacancy5", 5, requirements)));
+        requirements = new RequirementsList();
+        requirements.addRequirement("skillA", new RequirementProperties(1, false));
+        server.addVacancy(gson.toJson(DtoRequestsFactory.makeAddVacancyDtoRequest(employerToken, "vacancy6", 5, requirements)));
+        server.setVacancyActive(gson.toJson(DtoRequestsFactory.makeSetVacancyActiveDtoRequest(employerToken, 5, false)));
 
         return new EnvironmentForVacationsSearchTests(server, employeeToken);
     }
 
-    public Set<String> vacanciesNamesSetFromVacanciesInfoList(List<ShortVacancyInfoDto> vacanciesInfo) {
+    private Set<String> vacanciesNamesSetFromVacanciesInfoList(List<ShortVacancyInfoDto> vacanciesInfo) {
         Set<String> vacanciesNames = new HashSet<>();
         for(ShortVacancyInfoDto vacancyInfo: vacanciesInfo) {
             vacanciesNames.add(vacancyInfo.getVacancyName());
@@ -72,7 +73,7 @@ public class TestVacanciesSearch {
         return vacanciesNames;
     }
 
-    public void testSearchByReceivedEmployeesLogins(SearchOptions searchOption, Set<String> expectedVacanciesNames) {
+    private void testSearchByReceivedEmployeesLogins(SearchOptions searchOption, Set<String> expectedVacanciesNames) {
         EnvironmentForVacationsSearchTests environmentForTests = makeEnvironmentForTests();
         Server server = environmentForTests.getServer();
         Gson gson = new Gson();
@@ -116,17 +117,40 @@ public class TestVacanciesSearch {
     }
 
     @Test
-    public void searchEmployeesWithOneNecessarySkillWithEnoughLevel () {
-        Set<String> expectedVacancies = new HashSet<>();
-        expectedVacancies.add("vacancy1");
-        expectedVacancies.add("vacancy2");
-        expectedVacancies.add("vacancy4");
+    public void searchEmployeesWithOneSkillWithEnoughLevel () {
+        EnvironmentForVacationsSearchTests environmentForTests = makeEnvironmentForTests();
+        Server server = environmentForTests.getServer();
+        Gson gson = new Gson();
+        UUID employeeToken = environmentForTests.getEmployeeToken();
 
-        testSearchByReceivedEmployeesLogins(SearchOptions.ONE_REQUIRED_SKILL_WITH_ENOUGH_LEVEL, expectedVacancies);
+        String responseJson = server.searchVacanciesBySkills(gson.toJson(
+                DtoRequestsFactory.makeSearchVacanciesDtoRequest(employeeToken, SearchOptions.ONE_SKILL_WITH_ENOUGH_LEVEL.ordinal())
+        ));
+        List<ShortVacancyInfoDto> rightVacanciesNames = gson.fromJson(responseJson, RightVacanciesListDtoResponse.class).getRightVacancies();
+        HashSet<String> expectedVacanciesNames = new HashSet<>();
+        expectedVacanciesNames.add("vacancy1");
+        expectedVacanciesNames.add("vacancy2");
+        expectedVacanciesNames.add("vacancy3");
+        expectedVacanciesNames.add("vacancy4");
+
+        assertEquals(expectedVacanciesNames.size(), rightVacanciesNames.size());
+        assertTrue(vacanciesNamesSetFromVacanciesInfoList(rightVacanciesNames).containsAll(expectedVacanciesNames));
+
+        /*
+            Right order - (1 2 4), (3)
+            vacancy1 - 2 matched skills
+            vacancy2 - 2 matched skills
+            vacancy4 - 2 matched skills
+            vacancy3 - 1 matched skill
+        */
+        assertEquals("vacancy3", rightVacanciesNames.get(3).getVacancyName());
+
+
+        server.stopServer("");
     }
 
     @Test
-    public void invalidRequests() {
+    public void invalidSearchRequests() {
         Server server = new Server();
         server.startServer("");
         Gson gson = new Gson();
@@ -143,6 +167,40 @@ public class TestVacanciesSearch {
                 requestWithNonexistentToken, requestWithInvalidSearchOption, requestWithNullSearchOption};
         for(SearchVacanciesBySkillsDtoRequest invalidRequest: invalidRequests) {
             String responseJson = server.searchVacanciesBySkills(gson.toJson(invalidRequest));
+            assertNotNull(gson.fromJson(responseJson, ErrorDtoResponse.class).getError());
+        }
+
+        server.stopServer("");
+    }
+
+    @Test
+    public void invalidSetVacancyActive() {
+        Server server = new Server();
+        server.startServer("");
+        Gson gson = new Gson();
+
+        UUID token = gson.fromJson(server.registerEmployer(
+                gson.toJson(SpecialDtoRequestsFactory.makeValidRegisterEmployerDtoRequest())), SuccessfulRegisteredDtoResponse.class).getToken();
+        server.addVacancy(gson.toJson(SpecialDtoRequestsFactory.makeValidAddVacancyDtoRequest(token)));
+        SetVacancyActiveDtoRequest requestWithNonexistentToken = DtoRequestsFactory.makeSetVacancyActiveDtoRequest(
+                UUID.randomUUID(), 0, false
+        );
+        SetVacancyActiveDtoRequest requestWithNullToken = DtoRequestsFactory.makeSetVacancyActiveDtoRequest(
+                null, 0, false
+        );
+        SetVacancyActiveDtoRequest requestWithNonexistentVacancyNumber = DtoRequestsFactory.makeSetVacancyActiveDtoRequest(
+                token, 1, false
+        );
+        SetVacancyActiveDtoRequest requestWithNullVacancyNumber = DtoRequestsFactory.makeSetVacancyActiveDtoRequest(
+                token, null, false
+        );
+        SetVacancyActiveDtoRequest requestWithNullActive = DtoRequestsFactory.makeSetVacancyActiveDtoRequest(
+                token, 0, null
+        );
+        SetVacancyActiveDtoRequest invalidRequests[] = {
+                requestWithNonexistentToken, requestWithNonexistentVacancyNumber, requestWithNullVacancyNumber, requestWithNullToken, requestWithNullActive};
+        for(SetVacancyActiveDtoRequest invalidRequest: invalidRequests) {
+            String responseJson = server.setVacancyActive(gson.toJson(invalidRequest));
             assertNotNull(gson.fromJson(responseJson, ErrorDtoResponse.class).getError());
         }
 

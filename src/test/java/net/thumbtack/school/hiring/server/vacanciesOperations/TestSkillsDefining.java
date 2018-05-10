@@ -1,9 +1,9 @@
 package net.thumbtack.school.hiring.server.vacanciesOperations;
 
 import com.google.gson.Gson;
-import net.thumbtack.school.hiring.data.models.RequirementProperties;
-import net.thumbtack.school.hiring.data.models.RequirementsList;
-import net.thumbtack.school.hiring.data.models.SkillsList;
+import net.thumbtack.school.hiring.data.models.stored.RequirementProperties;
+import net.thumbtack.school.hiring.data.models.stored.RequirementsList;
+import net.thumbtack.school.hiring.data.models.stored.SkillsList;
 import net.thumbtack.school.hiring.data.models.requests.DtoRequestsFactory;
 import net.thumbtack.school.hiring.data.models.requests.SpecialDtoRequestsFactory;
 import net.thumbtack.school.hiring.data.models.responses.DefinedSkillsDtoResponse;

@@ -1,4 +1,4 @@
-package net.thumbtack.school.hiring.data.models.requests.utils.checkers;
+package net.thumbtack.school.hiring.data.models.requests.checkers;
 
 import java.util.UUID;
 
@@ -12,4 +12,8 @@ public interface ModelsExistenceChecker {
     boolean vacancyRequirementPairExists(UUID employerUuid, int vacancyNumber, String requirementName);
 
     boolean skillExists(UUID employeeUuid, String skillName);
+
+    boolean loginIsBusy(String login);
+
+    boolean loginBelongsEmployee(String login);
 }

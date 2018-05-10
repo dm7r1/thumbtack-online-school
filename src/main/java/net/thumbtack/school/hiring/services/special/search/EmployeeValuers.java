@@ -1,7 +1,7 @@
 package net.thumbtack.school.hiring.services.special.search;
 
-import net.thumbtack.school.hiring.data.models.RequirementsList;
-import net.thumbtack.school.hiring.data.models.SkillsList;
+import net.thumbtack.school.hiring.data.models.stored.RequirementsList;
+import net.thumbtack.school.hiring.data.models.stored.SkillsList;
 
 public class EmployeeValuers {
     public static final EmployeeValuer valuerAllSkillsWithEnoughLevel = (SkillsList employeeSkills, RequirementsList vacancyRequirements) -> {
@@ -29,7 +29,7 @@ public class EmployeeValuers {
 
     public static final EmployeeValuer valuerOneSkillWithEnoughLevel = (SkillsList employeeSkills, RequirementsList vacancyRequirements) -> {
         for(String requirementName: vacancyRequirements.getRequirementsNamesSet())
-            if(vacancyRequirements.isRequirementNecessary(requirementName) && employeeSkills.skillExists(requirementName)
+            if(employeeSkills.skillExists(requirementName)
                     && employeeSkills.getSkillLvl(requirementName) >= vacancyRequirements.getRequirementLvl(requirementName))
                 return true;
         return false;

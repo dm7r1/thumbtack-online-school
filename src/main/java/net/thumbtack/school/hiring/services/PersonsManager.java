@@ -1,13 +1,13 @@
 package net.thumbtack.school.hiring.services;
 
 import net.thumbtack.school.hiring.data.DataBase;
-import net.thumbtack.school.hiring.data.models.Employee;
-import net.thumbtack.school.hiring.data.models.Employer;
+import net.thumbtack.school.hiring.data.models.stored.Employee;
+import net.thumbtack.school.hiring.data.models.stored.Employer;
 import net.thumbtack.school.hiring.data.exceptions.InvalidRequestException;
 import net.thumbtack.school.hiring.data.models.requests.*;
-import net.thumbtack.school.hiring.data.models.requests.utils.checkers.ModelsExistenceCheckerImpl;
-import net.thumbtack.school.hiring.data.models.requests.utils.validators.ModelsExistenceValidator;
-import net.thumbtack.school.hiring.data.models.requests.utils.validators.PersonInfoRequestsValidator;
+import net.thumbtack.school.hiring.data.models.requests.checkers.ModelsExistenceCheckerImpl;
+import net.thumbtack.school.hiring.data.models.requests.validators.ModelsExistenceValidator;
+import net.thumbtack.school.hiring.data.models.requests.validators.PersonInfoRequestsValidator;
 import net.thumbtack.school.hiring.data.models.responses.DtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.ErrorDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.SuccessEmptyDtoResponse;
@@ -36,6 +36,7 @@ public class PersonsManager {
                     request.getEmail(),
                     request.getPassword()
             );
+            modelsExistenceValidator.validateLoginUniqueness(request.getLogin());
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }
@@ -63,6 +64,7 @@ public class PersonsManager {
                     request.getCompanyName(),
                     request.getAddress()
             );
+            modelsExistenceValidator.validateLoginUniqueness(request.getLogin());
         } catch (InvalidRequestException exception) {
            return ErrorDtoResponse.fromException(exception);
         }
@@ -82,7 +84,7 @@ public class PersonsManager {
 
     public DtoResponse changeEmployerInfo(ChangeEmployerInfoDtoRequest request) {
         try {
-            modelsExistenceValidator.validateEmployerUUID(request.getUuid());
+            modelsExistenceValidator.validateEmployerUUID(request.getToken());
             personInfoRequestsValidator.validateEmployerChangingInfo(
                     request.getNewFirstName(),
                     request.getNewLastName(),
@@ -95,7 +97,7 @@ public class PersonsManager {
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }
-        Employer employer = dataBase.getEmployerByUUID(request.getUuid());
+        Employer employer = dataBase.getEmployerByUUID(request.getToken());
 
         if(request.getNewFirstName() != null)
             employer.setFirstName(request.getNewFirstName());
@@ -117,7 +119,7 @@ public class PersonsManager {
 
     public DtoResponse changeEmployeeInfo(ChangeEmployeeInfoDtoRequest request) {
         try {
-            modelsExistenceValidator.validateEmployeeUUID(request.getUuid());
+            modelsExistenceValidator.validateEmployeeUUID(request.getToken());
             new PersonInfoRequestsValidator().validateEmployeeChangingInfo(
                     request.getNewFirstName(),
                     request.getNewLastName(),
@@ -128,7 +130,7 @@ public class PersonsManager {
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }
-        Employee employee = dataBase.getEmployeeByUUID(request.getUuid());
+        Employee employee = dataBase.getEmployeeByUUID(request.getToken());
 
         if(request.getNewFirstName() != null)
             employee.setFirstName(request.getNewFirstName());
@@ -146,22 +148,35 @@ public class PersonsManager {
 
     public DtoResponse deleteEmployee(DeleteEmployeeDtoRequest request) {
         try {
-            modelsExistenceValidator.validateEmployeeUUID(request.getUuid());
+            modelsExistenceValidator.validateEmployeeUUID(request.getToken());
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }
-        dataBase.deleteEmployeeByUUID(request.getUuid());
+        dataBase.deleteEmployeeByUUID(request.getToken());
 
         return SuccessEmptyDtoResponse.makeNewInstance();
     }
 
     public DtoResponse deleteEmployer(DeleteEmployerDtoRequest request) {
         try {
-            modelsExistenceValidator.validateEmployerUUID(request.getUuid());
+            modelsExistenceValidator.validateEmployerUUID(request.getToken());
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }
-        dataBase.deleteEmployerByUUID(request.getUuid());
+        dataBase.deleteEmployerByUUID(request.getToken());
+
+        return SuccessEmptyDtoResponse.makeNewInstance();
+    }
+
+    public DtoResponse setEmployeeActive(SetEmployeeActiveDtoRequest request) {
+        try {
+            modelsExistenceValidator.validateEmployeeUUID(request.getToken());
+            personInfoRequestsValidator.validateSetEmployeeActiveInfo(request.getActive());
+        } catch (InvalidRequestException exception) {
+            return ErrorDtoResponse.fromException(exception);
+        }
+
+        dataBase.setEmployeeActive(request.getToken(), request.getActive());
 
         return SuccessEmptyDtoResponse.makeNewInstance();
     }

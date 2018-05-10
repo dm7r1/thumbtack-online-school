@@ -1,6 +1,6 @@
 package net.thumbtack.school.hiring.data.models.responses.specialModels;
 
-import net.thumbtack.school.hiring.data.models.Vacancy;
+import net.thumbtack.school.hiring.data.models.stored.Vacancy;
 
 public class ShortVacancyInfoDto {
     private String vacancyName;

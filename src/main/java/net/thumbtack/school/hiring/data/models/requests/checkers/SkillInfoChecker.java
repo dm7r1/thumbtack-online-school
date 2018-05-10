@@ -1,4 +1,4 @@
-package net.thumbtack.school.hiring.data.models.requests.utils.checkers;
+package net.thumbtack.school.hiring.data.models.requests.checkers;
 
 public class SkillInfoChecker {
     public static boolean isValidSkillLvl(Integer skillLvl) {

@@ -1,15 +1,11 @@
 package net.thumbtack.school.hiring.data.models.responses.specialModels;
 
-import net.thumbtack.school.hiring.data.models.Employee;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import net.thumbtack.school.hiring.data.models.stored.Employee;
 
 public class ShortEmployeeInfoDto {
     private String login, firstName, lastName, email;
 
-    public ShortEmployeeInfoDto(String login, String firstName, String lastName, String email) {
+    private ShortEmployeeInfoDto(String login, String firstName, String lastName, String email) {
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;

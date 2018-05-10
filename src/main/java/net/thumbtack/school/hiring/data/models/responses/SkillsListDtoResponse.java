@@ -1,6 +1,6 @@
 package net.thumbtack.school.hiring.data.models.responses;
 
-import net.thumbtack.school.hiring.data.models.SkillsList;
+import net.thumbtack.school.hiring.data.models.stored.SkillsList;
 
 import java.util.Map;
 

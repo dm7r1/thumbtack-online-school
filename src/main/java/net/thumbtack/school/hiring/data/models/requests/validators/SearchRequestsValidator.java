@@ -1,4 +1,4 @@
-package net.thumbtack.school.hiring.data.models.requests.utils.validators;
+package net.thumbtack.school.hiring.data.models.requests.validators;
 
 import net.thumbtack.school.hiring.data.exceptions.InvalidRequestErrors;
 import net.thumbtack.school.hiring.data.exceptions.InvalidRequestException;

@@ -1,20 +1,24 @@
 package net.thumbtack.school.hiring.data.models.requests;
 
-import net.thumbtack.school.hiring.data.models.RequirementProperties;
-import net.thumbtack.school.hiring.data.models.RequirementsList;
+import net.thumbtack.school.hiring.data.models.stored.RequirementProperties;
+import net.thumbtack.school.hiring.data.models.stored.RequirementsList;
 
 import java.util.UUID;
 
 public class SpecialDtoRequestsFactory {
+    private static int uniqueLoginModifier = 0;
+
     public static RegisterEmployeeDtoRequest makeValidRegisterEmployeeDtoRequest() {
+        uniqueLoginModifier++;
         return DtoRequestsFactory.makeRegisterEmployeeDtoRequest(
-                "First", "Last", "Patronymic", "login", "email@example.com", "password"
+                "First", "Last", "Patronymic", "login" + Integer.toString(uniqueLoginModifier), "email@example.com", "password"
         );
     }
 
     public static RegisterEmployerDtoRequest makeValidRegisterEmployerDtoRequest() {
+        uniqueLoginModifier++;
         return DtoRequestsFactory.makeRegisterEmployerDtoRequest(
-                "First", "Last", "Patronymic", "login", "email@example.com", "password",
+                "First", "Last", "Patronymic", "login" + Integer.toString(uniqueLoginModifier), "email@example.com", "password",
                 "companyName", "address"
         );
     }

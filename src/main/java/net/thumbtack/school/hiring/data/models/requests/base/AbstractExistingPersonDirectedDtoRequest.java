@@ -3,13 +3,13 @@ package net.thumbtack.school.hiring.data.models.requests.base;
 import java.util.UUID;
 
 public class AbstractExistingPersonDirectedDtoRequest extends AbstractDtoRequest {
-    protected UUID uuid;
+    protected UUID token;
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getToken() {
+        return token;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setToken(UUID token) {
+        this.token = token;
     }
 }

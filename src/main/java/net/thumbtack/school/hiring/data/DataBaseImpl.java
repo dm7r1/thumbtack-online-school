@@ -1,8 +1,10 @@
 package net.thumbtack.school.hiring.data;
 
-import net.thumbtack.school.hiring.data.models.*;
+import com.google.gson.Gson;
+import net.thumbtack.school.hiring.data.models.stored.*;
 import net.thumbtack.school.hiring.services.special.search.EmployeeValuer;
 
+import java.io.*;
 import java.util.*;
 
 public class DataBaseImpl implements DataBase {
@@ -44,6 +46,13 @@ public class DataBaseImpl implements DataBase {
         return dataStorage.getEmployees().get(uuid);
     }
 
+    public Employee getEmployeeByLogin(String login) {
+        for(Employee employee: dataStorage.getEmployees().values())
+            if(employee.getLogin().equals(login))
+                return employee;
+        return null;
+    }
+
     public Employer getEmployerByUUID(UUID uuid) {
         return dataStorage.getEmployers().get(uuid);
     }
@@ -68,8 +77,9 @@ public class DataBaseImpl implements DataBase {
         List<Employee> rightEmployees = new LinkedList<>();
         RequirementsList requirements = getVacancy(employerUUID, vacancyNumber).getRequirements();
         for(Employee employee: dataStorage.getEmployees().values())
-            if(employeeValuer.isEmployeeRight(employee.getSkills(), requirements))
-                rightEmployees.add(employee);
+            if(employee.isActive())
+                if(employeeValuer.isEmployeeRight(employee.getSkills(), requirements))
+                    rightEmployees.add(employee);
         return rightEmployees;
     }
 
@@ -78,8 +88,9 @@ public class DataBaseImpl implements DataBase {
         SkillsList employeeSkills = getEmployeeSkills(employeeUUID);
         for(Employer employer: dataStorage.getEmployers().values()) {
             for (Vacancy vacancy : employer.getVacancies())
-                if (employeeValuer.isEmployeeRight(employeeSkills, vacancy.getRequirements()))
-                    rightVacancies.add(vacancy);
+                if(vacancy.isActive())
+                    if (employeeValuer.isEmployeeRight(employeeSkills, vacancy.getRequirements()))
+                        rightVacancies.add(vacancy);
         }
         return rightVacancies;
     }
@@ -90,6 +101,24 @@ public class DataBaseImpl implements DataBase {
 
     public boolean employerExists(UUID uuid) {
         return dataStorage.getEmployers().containsKey(uuid);
+    }
+
+    public boolean loginIsBusy(String login) {
+        for(Employee employee: dataStorage.getEmployees().values())
+            if(employee.getLogin().equals(login))
+                return true;
+        for(Employer employer: dataStorage.getEmployers().values())
+            if(employer.getLogin().equals(login))
+                return true;
+        return false;
+    }
+
+    public boolean loginBelongsEmployee(String login) {
+        for(Employee employee: dataStorage.getEmployees().values()) {
+            if (employee.getLogin().equals(login))
+                return true;
+        }
+        return false;
     }
 
     public void deleteEmployeeByUUID(UUID uuid) {
@@ -108,7 +137,44 @@ public class DataBaseImpl implements DataBase {
         getEmployeeByUUID(employeeUUID).removeSkills(skillsNames);
     }
 
-    public void defineSkills(Set<String> skillsNames) {
-        dataStorage.getDefinedSkills().addAll(skillsNames);
+    public void setVacancyActive(UUID employerUUID, int vacancyNumber, boolean active) {
+        getVacancy(employerUUID, vacancyNumber).setActive(active);
+    }
+
+    public void setEmployeeActive(UUID employeeUUID, boolean active) {
+        getEmployeeByUUID(employeeUUID).setActive(active);
+    }
+
+    public void setEmployeeActive(String login, boolean active) {
+        getEmployeeByLogin(login).setActive(active);
+    }
+
+    public void save(String filename) throws IOException {
+        String data = new Gson().toJson(this.dataStorage);
+        FileWriter fileWriter = new FileWriter(new File(filename));
+        fileWriter.write(data);
+        fileWriter.close();
+    }
+
+    public void load(String filename) throws IOException{
+        File file = new File(filename);
+        FileInputStream fileInputStream = new FileInputStream(file);
+        byte[] data = new byte[(int)file.length()];
+        fileInputStream.read(data);
+        dataStorage = new Gson().fromJson(new String(data), DataStorage.class);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DataBaseImpl dataBase = (DataBaseImpl) o;
+        return Objects.equals(dataStorage, dataBase.dataStorage);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(dataStorage);
     }
 }

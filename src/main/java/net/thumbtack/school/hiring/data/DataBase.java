@@ -1,8 +1,9 @@
 package net.thumbtack.school.hiring.data;
 
-import net.thumbtack.school.hiring.data.models.*;
+import net.thumbtack.school.hiring.data.models.stored.*;
 import net.thumbtack.school.hiring.services.special.search.EmployeeValuer;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -39,6 +40,10 @@ public interface DataBase {
 
     boolean employeeExists(UUID uuid);
 
+    boolean loginIsBusy(String login);
+
+    boolean loginBelongsEmployee(String login);
+
     void deleteEmployeeByUUID(UUID uuid);
 
     void deleteEmployerByUUID(UUID uuid);
@@ -46,4 +51,14 @@ public interface DataBase {
     void deleteVacancy(UUID uuid, int vacancyNumber);
 
     void deleteEmployeeSkills(UUID employeeUUID, Set<String> skillsNames);
+
+    void setVacancyActive(UUID employerUUID, int vacancyNumber, boolean active);
+
+    void setEmployeeActive(UUID employeeUUID, boolean active);
+
+    void setEmployeeActive(String login, boolean active);
+
+    void save(String filename) throws IOException;
+
+    void load(String filename) throws IOException;
 }

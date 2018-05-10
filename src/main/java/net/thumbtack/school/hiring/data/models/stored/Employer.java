@@ -1,7 +1,10 @@
-package net.thumbtack.school.hiring.data.models;
+package net.thumbtack.school.hiring.data.models.stored;
+
+import net.thumbtack.school.hiring.data.models.stored.base.AbstractPerson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Employer extends AbstractPerson {
     private String companyName, address;
@@ -37,5 +40,22 @@ public class Employer extends AbstractPerson {
 
     public Vacancy getVacancy(int vacancyNumber) {
         return vacancies.get(vacancyNumber);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Employer employer = (Employer) o;
+        return Objects.equals(companyName, employer.companyName) &&
+                Objects.equals(address, employer.address) &&
+                Objects.equals(vacancies, employer.vacancies);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), companyName, address, vacancies);
     }
 }

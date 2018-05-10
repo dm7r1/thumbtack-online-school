@@ -1,9 +1,9 @@
-package net.thumbtack.school.hiring.data.models.requests.utils.validators;
+package net.thumbtack.school.hiring.data.models.requests.validators;
 
 import net.thumbtack.school.hiring.data.exceptions.InvalidRequestErrors;
 import net.thumbtack.school.hiring.data.exceptions.InvalidRequestException;
-import net.thumbtack.school.hiring.data.models.SkillsList;
-import net.thumbtack.school.hiring.data.models.requests.utils.checkers.SkillInfoChecker;
+import net.thumbtack.school.hiring.data.models.stored.SkillsList;
+import net.thumbtack.school.hiring.data.models.requests.checkers.SkillInfoChecker;
 
 public class ChangeSkillsRequestsValidator {
     public void validateNewSkillsInfo(SkillsList skills) throws InvalidRequestException {

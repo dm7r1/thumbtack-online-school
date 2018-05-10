@@ -1,9 +1,9 @@
-package net.thumbtack.school.hiring.data.models.requests.utils.validators;
+package net.thumbtack.school.hiring.data.models.requests.validators;
 
 import net.thumbtack.school.hiring.data.exceptions.InvalidRequestErrors;
 import net.thumbtack.school.hiring.data.exceptions.InvalidRequestException;
-import net.thumbtack.school.hiring.data.models.RequirementsList;
-import net.thumbtack.school.hiring.data.models.requests.utils.checkers.SkillInfoChecker;
+import net.thumbtack.school.hiring.data.models.stored.RequirementsList;
+import net.thumbtack.school.hiring.data.models.requests.checkers.SkillInfoChecker;
 
 public class VacancyInfoRequestsValidator {
     public void validateAddVacancyInfo(String vacancyName, Integer payment, RequirementsList requirements) throws InvalidRequestException {
@@ -30,15 +30,20 @@ public class VacancyInfoRequestsValidator {
             throw new InvalidRequestException(InvalidRequestErrors.INVALID_REQUIREMENTS);
     }
 
-    public boolean isValidVacancyName(String vacancyName) {
+    public void validateSetVacancyActiveInfo(Boolean active) throws InvalidRequestException {
+        if(active == null)
+            throw new InvalidRequestException(InvalidRequestErrors.INVALID_ACTIVE);
+    }
+
+    private boolean isValidVacancyName(String vacancyName) {
         return vacancyName.length() != 0;
     }
 
-    public boolean isValidPayment(Integer payment) {
+    private boolean isValidPayment(Integer payment) {
         return payment > 0;
     }
 
-    public boolean isValidRequirements(RequirementsList requirements) {
+    private boolean isValidRequirements(RequirementsList requirements) {
         for(String requirementName: requirements.getRequirementsNamesSet()) {
             if(requirementName == null || !SkillInfoChecker.isValidSkillName(requirementName))
                 return false;

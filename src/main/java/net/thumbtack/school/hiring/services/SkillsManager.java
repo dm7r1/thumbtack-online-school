@@ -2,12 +2,12 @@ package net.thumbtack.school.hiring.services;
 
 import net.thumbtack.school.hiring.data.DataBase;
 import net.thumbtack.school.hiring.data.exceptions.InvalidRequestException;
-import net.thumbtack.school.hiring.data.models.SkillsList;
+import net.thumbtack.school.hiring.data.models.stored.SkillsList;
 import net.thumbtack.school.hiring.data.models.requests.ChangeSkillsDtoRequest;
 import net.thumbtack.school.hiring.data.models.requests.GetSkillsDtoRequest;
-import net.thumbtack.school.hiring.data.models.requests.utils.checkers.ModelsExistenceCheckerImpl;
-import net.thumbtack.school.hiring.data.models.requests.utils.validators.ChangeSkillsRequestsValidator;
-import net.thumbtack.school.hiring.data.models.requests.utils.validators.ModelsExistenceValidator;
+import net.thumbtack.school.hiring.data.models.requests.checkers.ModelsExistenceCheckerImpl;
+import net.thumbtack.school.hiring.data.models.requests.validators.ChangeSkillsRequestsValidator;
+import net.thumbtack.school.hiring.data.models.requests.validators.ModelsExistenceValidator;
 import net.thumbtack.school.hiring.data.models.responses.DtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.ErrorDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.SkillsListDtoResponse;
@@ -26,30 +26,30 @@ public class SkillsManager {
 
     public DtoResponse changeSkills(ChangeSkillsDtoRequest request) {
         try {
-            modelsExistenceValidator.validateEmployeeUUID(request.getUuid());
+            modelsExistenceValidator.validateEmployeeUUID(request.getToken());
             changeSkillsRequestsValidator.validateNewSkillsInfo(request.getNewOrChangedSkills());
-            modelsExistenceValidator.validateSkillsForDeleting(request.getUuid(), request.getSkillsForDeletingNames());
+            modelsExistenceValidator.validateSkillsForDeleting(request.getToken(), request.getSkillsForDeletingNames());
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }
 
         if(request.getSkillsForDeletingNames() != null)
-            dataBase.deleteEmployeeSkills(request.getUuid(), request.getSkillsForDeletingNames());
+            dataBase.deleteEmployeeSkills(request.getToken(), request.getSkillsForDeletingNames());
 
         if(request.getNewOrChangedSkills() != null)
-            dataBase.addEmployeeSkills(request.getUuid(), request.getNewOrChangedSkills());
+            dataBase.addEmployeeSkills(request.getToken(), request.getNewOrChangedSkills());
 
         return SuccessEmptyDtoResponse.makeNewInstance();
     }
 
     public DtoResponse getSkills(GetSkillsDtoRequest request) {
         try {
-            modelsExistenceValidator.validateEmployeeUUID(request.getUuid());
+            modelsExistenceValidator.validateEmployeeUUID(request.getToken());
         } catch (InvalidRequestException exception) {
             return ErrorDtoResponse.fromException(exception);
         }
 
-        SkillsList employeeSkills = dataBase.getEmployeeSkills(request.getUuid());
+        SkillsList employeeSkills = dataBase.getEmployeeSkills(request.getToken());
 
         return SkillsListDtoResponse.makeInstance(employeeSkills);
     }

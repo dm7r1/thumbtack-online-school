@@ -1,6 +1,6 @@
 package net.thumbtack.school.hiring.data.models.responses;
 
-import net.thumbtack.school.hiring.data.models.Employee;
+import net.thumbtack.school.hiring.data.models.stored.Employee;
 import net.thumbtack.school.hiring.data.models.responses.specialModels.ShortEmployeeInfoDto;
 
 import java.util.LinkedList;

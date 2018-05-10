@@ -1,6 +1,6 @@
 package net.thumbtack.school.hiring.data.models.requests;
 
-import net.thumbtack.school.hiring.data.models.SkillsList;
+import net.thumbtack.school.hiring.data.models.stored.SkillsList;
 import net.thumbtack.school.hiring.data.models.requests.base.AbstractExistingPersonDirectedDtoRequest;
 
 import java.util.Map;

@@ -1,8 +1,8 @@
 package net.thumbtack.school.hiring.data.models.responses.specialModels;
 
-import net.thumbtack.school.hiring.data.models.RequirementProperties;
-import net.thumbtack.school.hiring.data.models.RequirementsList;
-import net.thumbtack.school.hiring.data.models.Vacancy;
+import net.thumbtack.school.hiring.data.models.stored.RequirementProperties;
+import net.thumbtack.school.hiring.data.models.stored.RequirementsList;
+import net.thumbtack.school.hiring.data.models.stored.Vacancy;
 
 import java.util.Map;
 

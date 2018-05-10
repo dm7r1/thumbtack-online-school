@@ -1,4 +1,4 @@
-package net.thumbtack.school.hiring.data.models.requests.utils.validators;
+package net.thumbtack.school.hiring.data.models.requests.validators;
 
 import net.thumbtack.school.hiring.data.exceptions.InvalidRequestErrors;
 import net.thumbtack.school.hiring.data.exceptions.InvalidRequestException;
@@ -68,35 +68,40 @@ public class PersonInfoRequestsValidator {
                 throw new InvalidRequestException(InvalidRequestErrors.INVALID_ADDRESS);
     }
 
-    public boolean isValidFirstName(String firstName) {
+    public void validateSetEmployeeActiveInfo(Boolean active) throws InvalidRequestException {
+        if(active == null)
+            throw new InvalidRequestException(InvalidRequestErrors.INVALID_ACTIVE);
+    }
+
+    private boolean isValidFirstName(String firstName) {
         return firstName.length() != 0;
     }
 
-    public boolean isValidLastName(String lastName) {
+    private boolean isValidLastName(String lastName) {
         return lastName.length() != 0;
     }
 
-    public boolean isValidPatronymic(String patronymic) {
+    private boolean isValidPatronymic(String patronymic) {
         return true;
     }
 
-    public boolean isValidEmail(String email) {
+    private boolean isValidEmail(String email) {
         return EmailValidator.getInstance().isValid(email);
     }
 
-    public boolean isValidLogin(String login) {
+    private boolean isValidLogin(String login) {
         return login.length() >= MIN_LOGIN_LENGTH;
     }
 
-    public boolean isValidPassword(String password) {
+    private boolean isValidPassword(String password) {
         return password.length() >= MIN_PASSWORD_LENGTH;
     }
 
-    public boolean isValidCompanyName(String companyName) {
+    private boolean isValidCompanyName(String companyName) {
         return companyName.length() != 0;
     }
 
-    public boolean isValidAddress(String address) {
+    private boolean isValidAddress(String address) {
         return address.length() != 0;
     }
 }

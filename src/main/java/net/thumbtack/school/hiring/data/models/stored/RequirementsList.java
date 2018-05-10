@@ -1,4 +1,4 @@
-package net.thumbtack.school.hiring.data.models;
+package net.thumbtack.school.hiring.data.models.stored;
 
 import java.util.*;
 
@@ -57,5 +57,19 @@ public class RequirementsList {
 
     public static RequirementsList fromMap(Map<String, RequirementProperties> requirements) {
         return new RequirementsList(requirements);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequirementsList that = (RequirementsList) o;
+        return Objects.equals(requirements, that.requirements);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(requirements);
     }
 }

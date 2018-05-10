@@ -4,7 +4,7 @@ public enum SearchOptions {
     ALL_SKILLS_WITH_ENOUGH_LEVEL(EmployeeValuers.valuerAllSkillsWithEnoughLevel),
     NECESSARY_SKILLS_WITH_ENOUGH_LEVEL(EmployeeValuers.valuerNecessarySkillsWithEnoughLevel),
     ALL_SKILLS_WITH_ANY_LEVEL(EmployeeValuers.valuerAllSkillsWithAnyLevel),
-    ONE_REQUIRED_SKILL_WITH_ENOUGH_LEVEL(EmployeeValuers.valuerOneSkillWithEnoughLevel);
+    ONE_SKILL_WITH_ENOUGH_LEVEL(EmployeeValuers.valuerOneSkillWithEnoughLevel);
 
     private final EmployeeValuer valuer;
 
@@ -25,7 +25,7 @@ public enum SearchOptions {
             case 2:
                 return ALL_SKILLS_WITH_ANY_LEVEL;
             case 3:
-                return ONE_REQUIRED_SKILL_WITH_ENOUGH_LEVEL;
+                return ONE_SKILL_WITH_ENOUGH_LEVEL;
             default:
                 return null;
         }

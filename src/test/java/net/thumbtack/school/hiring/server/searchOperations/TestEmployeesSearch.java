@@ -1,12 +1,10 @@
 package net.thumbtack.school.hiring.server.searchOperations;
 
 import com.google.gson.Gson;
-import net.thumbtack.school.hiring.data.models.RequirementProperties;
-import net.thumbtack.school.hiring.data.models.RequirementsList;
-import net.thumbtack.school.hiring.data.models.SkillsList;
-import net.thumbtack.school.hiring.data.models.requests.DtoRequestsFactory;
-import net.thumbtack.school.hiring.data.models.requests.SearchEmployeesByVacancyDtoRequest;
-import net.thumbtack.school.hiring.data.models.requests.SpecialDtoRequestsFactory;
+import net.thumbtack.school.hiring.data.models.stored.RequirementProperties;
+import net.thumbtack.school.hiring.data.models.stored.RequirementsList;
+import net.thumbtack.school.hiring.data.models.stored.SkillsList;
+import net.thumbtack.school.hiring.data.models.requests.*;
 import net.thumbtack.school.hiring.data.models.responses.ErrorDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.RightEmployeesListDtoResponse;
 import net.thumbtack.school.hiring.data.models.responses.SuccessfulRegisteredDtoResponse;
@@ -26,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class TestEmployeesSearch {
-    public EnvironmentForEmployeesSearchTests makeEnvironmentForTests() {
+    private EnvironmentForEmployeesSearchTests makeEnvironmentForTests() {
         Server server = new Server();
         server.startServer("");
         Gson gson = new Gson();
@@ -77,11 +75,20 @@ public class TestEmployeesSearch {
                 DtoRequestsFactory.makeRegisterEmployeeDtoRequest("firstName", "lastName", "patronymic", "login5", "email@example.com", "password")
         )), SuccessfulRegisteredDtoResponse.class).getToken();
         server.changeSkills(gson.toJson(DtoRequestsFactory.makeChangeSkillsDtoRequest(employeeToken, skills, null)));
+        skills = new SkillsList();
+        skills.addSkill("skillA", 5);
+        skills.addSkill("skillB", 5);
+        skills.addSkill("skillC", 5);
+        employeeToken = gson.fromJson(server.registerEmployee(gson.toJson(
+                DtoRequestsFactory.makeRegisterEmployeeDtoRequest("firstName", "lastName", "patronymic", "login6", "email@example.com", "password")
+        )), SuccessfulRegisteredDtoResponse.class).getToken();
+        server.changeSkills(gson.toJson(DtoRequestsFactory.makeChangeSkillsDtoRequest(employeeToken, skills, null)));
+        server.setEmployeeActive(gson.toJson(DtoRequestsFactory.makeSetEmployeeActiveDtoRequest(employeeToken, false)));
 
         return new EnvironmentForEmployeesSearchTests(server, employerToken, 0);
     }
 
-    public Set<String> loginsSetFromEmployeesInfoList(List<ShortEmployeeInfoDto> employeesInfo) {
+    private Set<String> loginsSetFromEmployeesInfoList(List<ShortEmployeeInfoDto> employeesInfo) {
         Set<String> logins = new HashSet<>();
         for(ShortEmployeeInfoDto employeeInfo: employeesInfo) {
             logins.add(employeeInfo.getLogin());
@@ -89,7 +96,7 @@ public class TestEmployeesSearch {
         return logins;
     }
 
-    public void testSearchByReceivedEmployeesLogins(SearchOptions searchOption, Set<String> expectedLogins) {
+    private void testSearchByReceivedEmployeesLogins(SearchOptions searchOption, Set<String> expectedLogins) {
         EnvironmentForEmployeesSearchTests environmentForTests = makeEnvironmentForTests();
         Server server = environmentForTests.getServer();
         Gson gson = new Gson();
@@ -117,7 +124,7 @@ public class TestEmployeesSearch {
     }
 
     @Test
-    public void searchEmployeesWithNecessarySkillsWithEnoughLevel () {
+    public void searchEmployeesWithSkillsWithEnoughLevel () {
         Set<String> expectedLogins = new HashSet<>();
         expectedLogins.add("login1");
         expectedLogins.add("login2");
@@ -145,11 +152,11 @@ public class TestEmployeesSearch {
         expectedLogins.add("login4");
         expectedLogins.add("login5");
 
-        testSearchByReceivedEmployeesLogins(SearchOptions.ONE_REQUIRED_SKILL_WITH_ENOUGH_LEVEL, expectedLogins);
+        testSearchByReceivedEmployeesLogins(SearchOptions.ONE_SKILL_WITH_ENOUGH_LEVEL, expectedLogins);
     }
 
     @Test
-    public void invalidRequests() {
+    public void invalidSearchRequests() {
         Server server = new Server();
         server.startServer("");
         Gson gson = new Gson();
@@ -172,6 +179,32 @@ public class TestEmployeesSearch {
                 requestWithInvalidSearchOption, requestWithNullSearchOption};
         for(SearchEmployeesByVacancyDtoRequest invalidRequest: invalidRequests) {
             String responseJson = server.searchEmployeesByVacancy(gson.toJson(invalidRequest));
+            assertNotNull(gson.fromJson(responseJson, ErrorDtoResponse.class).getError());
+        }
+
+        server.stopServer("");
+    }
+
+    @Test
+    public void invalidSetEmployeeActiveRequests() {
+        Server server = new Server();
+        server.startServer("");
+        Gson gson = new Gson();
+
+        UUID token = gson.fromJson(server.registerEmployee(
+                gson.toJson(SpecialDtoRequestsFactory.makeValidRegisterEmployeeDtoRequest())), SuccessfulRegisteredDtoResponse.class).getToken();
+        SetEmployeeActiveDtoRequest requestWithNonexistentToken = DtoRequestsFactory.makeSetEmployeeActiveDtoRequest(
+                UUID.randomUUID(), false
+        );
+        SetEmployeeActiveDtoRequest requestWithNullToken = DtoRequestsFactory.makeSetEmployeeActiveDtoRequest(
+                null, false
+        );
+        SetEmployeeActiveDtoRequest requestWithNullActive = DtoRequestsFactory.makeSetEmployeeActiveDtoRequest(
+                token, null
+        );
+        SetEmployeeActiveDtoRequest invalidRequests[] = {requestWithNonexistentToken, requestWithNullToken, requestWithNullActive};
+        for(SetEmployeeActiveDtoRequest invalidRequest: invalidRequests) {
+            String responseJson = server.setEmployeeActive(gson.toJson(invalidRequest));
             assertNotNull(gson.fromJson(responseJson, ErrorDtoResponse.class).getError());
         }
 

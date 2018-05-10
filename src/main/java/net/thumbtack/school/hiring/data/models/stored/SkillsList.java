@@ -1,7 +1,8 @@
-package net.thumbtack.school.hiring.data.models;
+package net.thumbtack.school.hiring.data.models.stored;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class SkillsList {
@@ -56,5 +57,19 @@ public class SkillsList {
 
     public static SkillsList fromMap(Map<String, Integer> skills) {
         return new SkillsList(skills);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SkillsList that = (SkillsList) o;
+        return Objects.equals(skills, that.skills);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(skills);
     }
 }
