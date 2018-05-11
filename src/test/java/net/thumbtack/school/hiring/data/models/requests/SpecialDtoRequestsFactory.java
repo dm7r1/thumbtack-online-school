@@ -9,16 +9,16 @@ public class SpecialDtoRequestsFactory {
     private static int uniqueLoginModifier = 0;
 
     public static RegisterEmployeeDtoRequest makeValidRegisterEmployeeDtoRequest() {
-        uniqueLoginModifier++;
+        ++uniqueLoginModifier;
         return DtoRequestsFactory.makeRegisterEmployeeDtoRequest(
-                "First", "Last", "Patronymic", "login(FromFactory)" + Integer.toString(uniqueLoginModifier), "email@example.com", "password"
+                "First", "Last", "Patronymic", "login(requestsFactory)" + Integer.toString(uniqueLoginModifier), "email@example.com", "password"
         );
     }
 
     public static RegisterEmployerDtoRequest makeValidRegisterEmployerDtoRequest() {
-        uniqueLoginModifier++;
+        ++uniqueLoginModifier;
         return DtoRequestsFactory.makeRegisterEmployerDtoRequest(
-                "First", "Last", "Patronymic", "login(FromFactory)" + Integer.toString(uniqueLoginModifier), "email@example.com", "password",
+                "First", "Last", "Patronymic", "login(requestsFactory)" + Integer.toString(uniqueLoginModifier), "email@example.com", "password",
                 "companyName", "address"
         );
     }
