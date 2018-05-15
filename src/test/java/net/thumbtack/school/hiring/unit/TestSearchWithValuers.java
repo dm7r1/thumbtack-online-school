@@ -8,6 +8,8 @@ import net.thumbtack.school.hiring.data.daoimpl.VacancyDaoImpl;
 import net.thumbtack.school.hiring.data.models.requests.SpecialModelsFactory;
 import net.thumbtack.school.hiring.data.models.stored.*;
 import net.thumbtack.school.hiring.services.special.search.EmployeeValuer;
+import net.thumbtack.school.hiring.unit.specialModels.EmployeeDaoEmployerUuidAndEmployeesList;
+import net.thumbtack.school.hiring.unit.specialModels.VacancyDaoEmployeeUuidAndVacanciesList;
 import org.junit.Test;
 
 import java.util.*;
@@ -15,8 +17,12 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 
 public class TestSearchWithValuers {
-    @Test
-    public void testGetEmployeesByVacancyRequirements() {
+    private static EmployeeValuer valuerAlwaysFalse = (SkillsList employeeSkills, RequirementsList vacancyRequirements) -> false;
+    private static EmployeeValuer valuerAlwaysTrue = (SkillsList employeeSkills, RequirementsList vacancyRequirements) -> true;
+
+    private EmployeeDaoEmployerUuidAndEmployeesList getEmployeeDaoEmployerUuidAndEmployeesListForTest() {
+        EmployeeDaoEmployerUuidAndEmployeesList employeeDaoEmployerUuidAndEmployeesList = new EmployeeDaoEmployerUuidAndEmployeesList();
+
         DataStorage dataStorage = DataStorage.getEmptyInstance();
         EmployeeDao employeeDao = new EmployeeDaoImpl(dataStorage);
 
@@ -36,30 +42,52 @@ public class TestSearchWithValuers {
 
         employer.addVacancy(SpecialModelsFactory.getValidVacancy());
 
-        EmployeeValuer valuerAlwaysFalse = (SkillsList employeeSkills, RequirementsList vacancyRequirements) -> false;
-        EmployeeValuer valuerAlwaysTrue = (SkillsList employeeSkills, RequirementsList vacancyRequirements) -> true;
+        employeeDaoEmployerUuidAndEmployeesList.setEmployeeDao(employeeDao);
+        employeeDaoEmployerUuidAndEmployeesList.setEmployerUuid(employerUuid);
+        employeeDaoEmployerUuidAndEmployeesList.setEmployeesList(new ArrayList<>(employees.values()));
 
-        List<Employee> gottenEmployees = employeeDao.getEmployeesByVacancyRequirements(employerUuid, 0, valuerAlwaysFalse);
+        return employeeDaoEmployerUuidAndEmployeesList;
+    }
+
+    @Test
+    public void testGetEmployeesByVacancyRequirements_ValuerAlwaysFalse() {
+        EmployeeDaoEmployerUuidAndEmployeesList employeeDaoEmployerUuidAndEmployeesList = getEmployeeDaoEmployerUuidAndEmployeesListForTest();
+
+        List<Employee> gottenEmployees = employeeDaoEmployerUuidAndEmployeesList.getEmployeeDao().getEmployeesByVacancyRequirements(
+                employeeDaoEmployerUuidAndEmployeesList.getEmployerUuid(), 0, valuerAlwaysFalse);
         assertEquals(0, gottenEmployees.size());
+    }
 
-        gottenEmployees = employeeDao.getEmployeesByVacancyRequirements(employerUuid, 0, valuerAlwaysTrue);
+    @Test
+    public void testGetEmployeesByVacancyRequirements_valuerAlwaysTrueAllEmployeesAreActive() {
+        EmployeeDaoEmployerUuidAndEmployeesList employeeDaoEmployerUuidAndEmployeesList = getEmployeeDaoEmployerUuidAndEmployeesListForTest();
+
+        List<Employee> gottenEmployees = employeeDaoEmployerUuidAndEmployeesList.getEmployeeDao().getEmployeesByVacancyRequirements(
+                employeeDaoEmployerUuidAndEmployeesList.getEmployerUuid(), 0, valuerAlwaysTrue);
         Set<Employee> gottenEmployeesSet = new HashSet<>(gottenEmployees);
-        Set<Employee> expectedEmployeesSet = new HashSet<>(employees.values());
+        Set<Employee> expectedEmployeesSet = new HashSet<>(employeeDaoEmployerUuidAndEmployeesList.getEmployeesList());
         assertEquals(expectedEmployeesSet, gottenEmployeesSet);
+    }
 
-        Employee inactiveEmployee = new LinkedList<>(employees.values()).get(0);
+    @Test
+    public void testGetEmployeesByVacancyRequirements_valuerAlwaysTrueNotAllEmployeesAreActive() {
+        EmployeeDaoEmployerUuidAndEmployeesList employeeDaoEmployerUuidAndEmployeesList = getEmployeeDaoEmployerUuidAndEmployeesListForTest();
+
+        Employee inactiveEmployee = employeeDaoEmployerUuidAndEmployeesList.getEmployeesList().get(0);
         inactiveEmployee.setActive(false);
-        gottenEmployees = employeeDao.getEmployeesByVacancyRequirements(employerUuid, 0, valuerAlwaysTrue);
-        gottenEmployeesSet = new HashSet<>(gottenEmployees);
+        List<Employee> gottenEmployees = employeeDaoEmployerUuidAndEmployeesList.getEmployeeDao().getEmployeesByVacancyRequirements(
+                employeeDaoEmployerUuidAndEmployeesList.getEmployerUuid(), 0, valuerAlwaysTrue);
+        Set<Employee> gottenEmployeesSet = new HashSet<>(gottenEmployees);
 
-        expectedEmployeesSet = new HashSet<>(employees.values());
+        Set<Employee> expectedEmployeesSet = new HashSet<>(employeeDaoEmployerUuidAndEmployeesList.getEmployeesList());
         expectedEmployeesSet.remove(inactiveEmployee);
 
         assertEquals(expectedEmployeesSet, gottenEmployeesSet);
     }
 
-    @Test
-    public void testGetVacanciesByEmployeeSkills() {
+    private VacancyDaoEmployeeUuidAndVacanciesList getVacancyDaoEmployeeUuidAndVacanciesListForTest() {
+        VacancyDaoEmployeeUuidAndVacanciesList vacancyDaoEmployeeUuidAndVacanciesList = new VacancyDaoEmployeeUuidAndVacanciesList();
+
         DataStorage dataStorage = DataStorage.getEmptyInstance();
         VacancyDao vacancyDao = new VacancyDaoImpl(dataStorage);
 
@@ -79,23 +107,44 @@ public class TestSearchWithValuers {
             vacancies.add(vacancy);
         }
 
-        EmployeeValuer valuerAlwaysFalse = (SkillsList employeeSkills, RequirementsList vacancyRequirements) -> false;
-        EmployeeValuer valuerAlwaysTrue = (SkillsList employeeSkills, RequirementsList vacancyRequirements) -> true;
+        vacancyDaoEmployeeUuidAndVacanciesList.setVacancyDao(vacancyDao);
+        vacancyDaoEmployeeUuidAndVacanciesList.setEmployeeUuid(employeeUuid);
+        vacancyDaoEmployeeUuidAndVacanciesList.setVacanciesList(vacancies);
 
-        List<Vacancy> gottenVacancies = vacancyDao.getVacanciesByEmployeeSkills(employeeUuid, valuerAlwaysFalse);
+        return vacancyDaoEmployeeUuidAndVacanciesList;
+    }
+
+    @Test
+    public void testGetVacanciesByEmployeeSkills_valuerAlwaysFalse() {
+        VacancyDaoEmployeeUuidAndVacanciesList vacancyDaoEmployeeUuidAndVacanciesList = getVacancyDaoEmployeeUuidAndVacanciesListForTest();
+
+        List<Vacancy> gottenVacancies = vacancyDaoEmployeeUuidAndVacanciesList.getVacancyDao().getVacanciesByEmployeeSkills(
+                vacancyDaoEmployeeUuidAndVacanciesList.getEmployeeUuid(), valuerAlwaysFalse);
         assertEquals(0, gottenVacancies.size());
+    }
 
-        gottenVacancies = vacancyDao.getVacanciesByEmployeeSkills(employeeUuid, valuerAlwaysTrue);
+    @Test
+    public void testGetVacanciesByEmployeeSkills_valuerAlwaysTrueAllVacanciesAreActive() {
+        VacancyDaoEmployeeUuidAndVacanciesList vacancyDaoEmployeeUuidAndVacanciesList = getVacancyDaoEmployeeUuidAndVacanciesListForTest();
+
+        List<Vacancy> gottenVacancies = vacancyDaoEmployeeUuidAndVacanciesList.getVacancyDao().getVacanciesByEmployeeSkills(
+                vacancyDaoEmployeeUuidAndVacanciesList.getEmployeeUuid(), valuerAlwaysTrue);
         Set<Vacancy> gottenVacanciesSet = new HashSet<>(gottenVacancies);
-        Set<Vacancy> expectedVacanciesSet = new HashSet<>(vacancies);
+        Set<Vacancy> expectedVacanciesSet = new HashSet<>(vacancyDaoEmployeeUuidAndVacanciesList.getVacanciesList());
         assertEquals(expectedVacanciesSet, gottenVacanciesSet);
+    }
 
-        Vacancy inactiveVacancy = vacancies.get(0);
+    @Test
+    public void testGetVacanciesByEmployeeSkills_valuerAlwaysTrueNotAllVacanciesAreActive() {
+        VacancyDaoEmployeeUuidAndVacanciesList vacancyDaoEmployeeUuidAndVacanciesList = getVacancyDaoEmployeeUuidAndVacanciesListForTest();
+
+        Vacancy inactiveVacancy = vacancyDaoEmployeeUuidAndVacanciesList.getVacanciesList().get(0);
         inactiveVacancy.setActive(false);
-        gottenVacancies = vacancyDao.getVacanciesByEmployeeSkills(employeeUuid, valuerAlwaysTrue);
-        gottenVacanciesSet = new HashSet<>(gottenVacancies);
+        List<Vacancy> gottenVacancies = vacancyDaoEmployeeUuidAndVacanciesList.getVacancyDao().getVacanciesByEmployeeSkills(
+                vacancyDaoEmployeeUuidAndVacanciesList.getEmployeeUuid(), valuerAlwaysTrue);
+        Set<Vacancy> gottenVacanciesSet = new HashSet<>(gottenVacancies);
 
-        expectedVacanciesSet = new HashSet<>(vacancies);
+        Set<Vacancy> expectedVacanciesSet = new HashSet<>(vacancyDaoEmployeeUuidAndVacanciesList.getVacanciesList());
         expectedVacanciesSet.remove(inactiveVacancy);
 
         assertEquals(expectedVacanciesSet, gottenVacanciesSet);
