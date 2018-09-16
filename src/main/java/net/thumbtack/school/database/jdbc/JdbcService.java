@@ -217,14 +217,16 @@ public class JdbcService {
     }
 
     public static List<School> getSchoolsWithGroups() throws SQLException {
-        PreparedStatement sttmnt = JdbcUtils.getConnection().prepareStatement("SELECT * FROM schools");
+        PreparedStatement sttmnt = JdbcUtils.getConnection().prepareStatement("SELECT * FROM schools JOIN groups ON schoolId = schools.id ORDER BY schools.id");
         sttmnt.executeQuery();
-        ResultSet rsSchools = sttmnt.getResultSet();
+        ResultSet rs = sttmnt.getResultSet();
         List<School> schools = new ArrayList<>();
-        while(rsSchools.next()) {
-            School school = schoolFromResultSetByNumbers(rsSchools);
-            addGroupsToSchool(school);
-            schools.add(school);
+        while(rs.next()) {
+            System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4));
+            if (schools.size() == 0 || schools.get(schools.size() - 1).getId() != rs.getInt(1)) {
+                schools.add(new School(rs.getInt(1), rs.getString(2), rs.getInt(3)));
+            }
+            schools.get(schools.size() - 1).addGroup(new Group(rs.getInt(4), rs.getString(5), rs.getString(6)));
         }
         return schools;
     }
